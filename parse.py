@@ -2,6 +2,7 @@ import json
 import sys
 
 from mgz.summary import Summary
+from util.filename import filename
 
 
 def commands():
@@ -54,16 +55,18 @@ def print_commands():
 
 
 if len(sys.argv) == 3:
-    # TODO: validate sys.argv[1]
-    with open("recs/" + sys.argv[1], "rb") as file:
-        if sys.argv[2] in commands():
-            summary = Summary(file)
-            data = commands().get(sys.argv[2])(summary)
-            # TODO: handle special commands (header, version...)
-            print(json.dumps(data))
-        else:
-            print("[ERROR 2] ILLEGAL COMMAND")
-            print_commands()
+    if filename(sys.argv[1]):
+        with open("recs/" + sys.argv[1], "rb") as file:
+            if sys.argv[2] in commands():
+                summary = Summary(file)
+                data = commands().get(sys.argv[2])(summary)
+                # TODO: handle special commands (header, version...)
+                print(json.dumps(data))
+            else:
+                print("[ERROR 2] ILLEGAL COMMAND")
+                print_commands()
+    else:
+        print("[ERROR 3] ILLEGAL FILENAME")
 else:
     print("[ERROR 1] ILLEGAL ARGUMENTS")
     print_arguments()
