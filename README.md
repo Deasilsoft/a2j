@@ -1,4 +1,4 @@
-# aoe2-record-to-json
+# aoe2record-to-json
 
 A tool used to convert AoE2 records to JSON.
 
