@@ -15,5 +15,5 @@ A tool for handling AoE2 records.
 ## Usage
 
     add.py <file> <content>
-    parse.py <file> <command>
+    parse.py <file> <command...>
     remove.py <file>
