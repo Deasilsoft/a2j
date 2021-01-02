@@ -2,3 +2,4 @@ recs/*
 !recs/.keep
 venv
 .idea
+__pycache__
