@@ -1,6 +1,6 @@
-# aoe2-record-handler
+# aoe2-record-to-json
 
-A tool for handling AoE2 records.
+A tool used to convert AoE2 records to JSON.
 
 ## Setup
 
@@ -14,6 +14,14 @@ A tool for handling AoE2 records.
 
 ## Usage
 
-    add.py <file> <content>
+    append.py <file> <content>
     parse.py <file> <command...>
     remove.py <file>
+
+## Example
+
+    append.py example.aoe2record <binary values>
+    append.py example.aoe2record <binary values>
+    append.py example.aoe2record <binary values>
+
+    parse.py example.aoe2record players teams
