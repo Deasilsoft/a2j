@@ -1,6 +1,6 @@
 # aoe2record-to-json
 
-A tool used to convert AoE2 records to JSON.
+An Age of Empires II record analyzing tool used to convert AoE2 records to JSON.
 
 ## Setup
 
