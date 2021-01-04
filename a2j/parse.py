@@ -4,6 +4,7 @@ import logging
 from mgz.summary import Summary
 from a2j.util import is_record, get_record
 from a2j.commands import get_commands
+from a2j.encoder import JSONEncoder
 
 
 def parse(arguments):
@@ -29,11 +30,9 @@ def parse(arguments):
 
                     for command in commands:
                         if command in get_commands():
-                            data = get_commands().get(command)(summary)
-                            # TODO: handle special commands (header, version...)
-                            output[command] = data
+                            output[command] = get_commands().get(command)(summary)
 
-                    print(json.dumps(output))
+                    print(json.dumps(output, indent=4, cls=JSONEncoder))
 
                 file.close()
 

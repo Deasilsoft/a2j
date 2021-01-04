@@ -13,8 +13,8 @@ def get_commands():
         "mirror": Summary.get_mirror,
         "owner": Summary.get_owner,
         "platform": Summary.get_platform,
-        "restored": Summary.get_restored,
-        "version": Summary.get_version,
+        "restored": get_restored,
+        "version": get_version,
 
         # PLAYERS
         "chat": Summary.get_chat,
@@ -32,4 +32,20 @@ def get_commands():
         "postgame": Summary.get_postgame,
         "settings": Summary.get_settings,
         "start_time": Summary.get_start_time,
+    }
+
+
+def get_restored(summary):
+    return {
+        "is_restored": summary.get_restored()[0],
+        "time": summary.get_restored()[1],
+    }
+
+
+def get_version(summary):
+    return {
+        "recanalyst": summary.get_version()[0],
+        "game": summary.get_version()[1],
+        "save": summary.get_version()[2],
+        "log": summary.get_version()[3],
     }
