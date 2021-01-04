@@ -2,5 +2,5 @@ def is_record(path):
     return str.find(path, "..") == -1
 
 
-def record(path):
+def get_record(path):
     return "recs/" + path
