@@ -1,7 +1,8 @@
 import json
 import logging
 
-from mgz.summary import Summary
+import mgz.summary
+
 from a2j.util import is_record, get_record
 from a2j.commands import get_commands
 from a2j.encoder import JSONEncoder
@@ -25,14 +26,15 @@ def parse(arguments):
                         logging.warning("Invalid command: " + command)
 
                 if perform:
-                    summary = Summary(file)
-                    output = {}
+                    mgz.summary.LOGGER.setLevel(logging.ERROR)
+                    summary = mgz.summary.Summary(file)
+                    objects = {}
 
                     for command in commands:
                         if command in get_commands():
-                            output[command] = get_commands().get(command)(summary)
+                            objects[command] = get_commands().get(command)(summary)
 
-                    print(json.dumps(output, indent=4, cls=JSONEncoder))
+                    print(json.dumps(objects, indent=4, cls=JSONEncoder))
 
                 file.close()
 
