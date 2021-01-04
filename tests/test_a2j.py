@@ -12,7 +12,7 @@ def initialize():
     global PARSED, READ, INITIALIZED
 
     if INITIALIZED is False:
-        cls = ["py", "app.py", "parse", "tests/test.mgz"]
+        cls = ["python", "app.py", "parse", "tests/test.mgz"]
 
         for command in get_commands():
             cls.append(command)
