@@ -1,5 +1,5 @@
-recs/*
-!recs/.keep
+records/*
+!records/.keep
 venv
 .idea
 __pycache__

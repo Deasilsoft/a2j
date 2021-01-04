@@ -5,10 +5,8 @@ from a2j.version import version
 def print_help(arguments):
     print("aoe2record-to-json version: " + version)
     print("\nAvailable functions:\n")
-    print("\tappend <record> <content>")
     print("\thelp")
     print("\tparse <record> <command> [...]")
-    print("\tremove <record>")
 
     print("\nAvailable commands:\n")
     length = 0
