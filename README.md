@@ -2,6 +2,10 @@
 
 An Age of Empires II record analyzing tool used to convert AoE2 records to JSON.
 
+## Requirements
+
+Python 3.6 or later (check Actions)
+
 ## Setup
 
 1. Clone repository.
