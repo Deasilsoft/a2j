@@ -22,10 +22,8 @@ All functions are executed from `app.py`.
 
 Available functions:
 
-        append <record> <content>
         help
         parse <record> <command> [...]
-        remove <record>
 
 Available commands:
 
