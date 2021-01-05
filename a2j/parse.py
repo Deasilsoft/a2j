@@ -23,7 +23,7 @@ def parse(arguments):
 
                 else:
                     data["errors"].append({
-                        "message": "Invalid command " + command,
+                        "message": "Command does not exist: " + command,
                         "errno": 1
                     })
 
@@ -36,7 +36,7 @@ def parse(arguments):
 
                 except Exception as e:
                     data["errors"].append({
-                        "message": "Error while parsing aoe2 record: " + str(e),
+                        "message": "Parsing AoE2 record stopped with this error: " + str(e),
                         "errno": 2
                     })
 
