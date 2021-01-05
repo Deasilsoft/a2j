@@ -1,5 +1,4 @@
 import json
-import logging
 
 import mgz.summary
 
@@ -10,6 +9,9 @@ from a2j.encoder import JSONEncoder
 def parse(arguments):
     path = arguments[2]
     commands = arguments[3:]
+    data = {
+        "errors": []
+    }
 
     try:
         with open(path, "rb") as file:
@@ -18,21 +20,37 @@ def parse(arguments):
             for command in commands:
                 if command in get_commands():
                     perform = True
+
                 else:
-                    logging.warning("Invalid command: " + command)
+                    data["errors"].append({
+                        "message": "Invalid command " + command,
+                        "errno": 1
+                    })
 
             if perform:
-                mgz.summary.LOGGER.setLevel(logging.ERROR)
-                summary = mgz.summary.Summary(file)
-                objects = {}
+                summary = None
 
-                for command in commands:
-                    if command in get_commands():
-                        objects[command] = get_commands().get(command)(summary)
+                try:
+                    mgz.summary.LOGGER.setLevel(9001)
+                    summary = mgz.summary.Summary(file)
 
-                print(json.dumps(objects, indent=4, cls=JSONEncoder))
+                except Exception as e:
+                    data["errors"].append({
+                        "message": "Error while parsing aoe2 record: " + str(e),
+                        "errno": 2
+                    })
+
+                if summary is not None:
+                    for command in commands:
+                        if command in get_commands():
+                            data[command] = get_commands().get(command)(summary)
 
             file.close()
 
     except FileNotFoundError as e:
-        logging.error("Record does not exist: " + e.filename)
+        data["errors"].append({
+            "message": "Record does not exist: " + e.filename,
+            "errno": 0
+        })
+
+    print(json.dumps(data, indent=4, cls=JSONEncoder))

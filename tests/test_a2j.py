@@ -1,5 +1,5 @@
-import subprocess
 import json
+import subprocess
 
 from a2j.commands import get_commands
 
