@@ -12,7 +12,7 @@ def initialize():
     global PARSED, READ, INITIALIZED
 
     if INITIALIZED is False:
-        cls = ["python", "app.py", "parse", "tests/test.mgz"]
+        cls = ["python", "app.py", "parse", "tests/data/test.mgz"]
 
         for command in get_commands():
             cls.append(command)
@@ -25,7 +25,7 @@ def initialize():
 
         PARSED = json.loads(data)
 
-        with open("tests/test.json", "r") as file:
+        with open("tests/data/test.json", "r") as file:
             READ = json.loads(file.read())
             file.close()
 
