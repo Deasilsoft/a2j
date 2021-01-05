@@ -22,14 +22,14 @@ All functions are executed from `app.py`.
 
 Available functions:
 
-        help
-        parse <record> <command> [...]
+     help
+     parse <record> <command> [...]
 
 Available commands:
 
-        completed, dataset, encoding, file_hash, hash, language, mirror, owner, platform
-        restored, version, chat, diplomacy, players, profiles, ratings, teams, achievements
-        duration, map, objects, postgame, settings, start_time
+     completed, dataset, encoding, file_hash, hash, language, mirror, owner, platform
+     restored, version, chat, diplomacy, players, profiles, ratings, teams, achievements
+     duration, map, objects, postgame, settings, start_time
 
 ## Example
 
