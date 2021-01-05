@@ -8,6 +8,14 @@ Python 3.6 or later (check Actions)
 
 ## Setup
 
+### Docker
+
+1. Pull image.
+
+       docker pull deasilsoft/a2j
+
+### Standalone
+
 1. Clone repository.
 
        git clone https://github.com/Deasilsoft/aoe2record-to-json.git
@@ -33,4 +41,4 @@ Available commands:
 
 ## Example
 
-    app.py parse example.aoe2record players teams objects
+    app.py parse records/example.aoe2record players teams objects
