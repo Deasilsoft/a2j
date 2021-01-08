@@ -4,13 +4,15 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - name: Check Out Repository
+      - name: Checkout Repository
         uses: actions/checkout@v2
       - name: Installing docker...
         run: sudo curl -sSL https://get.docker.com/ | sh
       - name: Building image...
         run: docker build -t deasilsoft/a2j:latest .
       - name: Running container...
-        run: docker run -d deasilsoft/a2j:latest --name a2j apk add pytest curl
+        run: docker run -d deasilsoft/a2j:latest --name a2j
+      - name: Installing test environment...
+        run: docker exec --name a2j apk add pytest curl
       - name: Running tests...
         run: docker exec --name a2j pytest
