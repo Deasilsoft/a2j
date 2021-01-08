@@ -6,15 +6,13 @@ from a2j.commands import get_commands
 from a2j.encoder import JSONEncoder
 
 
-def parse(arguments):
-    path = arguments[2]
-    commands = arguments[3:]
+def parse(record, commands):
     data = {
         "errors": []
     }
 
     try:
-        with open(path, "rb") as file:
+        with open(record, "rb") as file:
             perform = False
 
             for command in commands:
@@ -53,4 +51,4 @@ def parse(arguments):
             "errno": 0
         })
 
-    print(json.dumps(data, indent=4, cls=JSONEncoder))
+    return json.dumps(data, indent=4, cls=JSONEncoder)

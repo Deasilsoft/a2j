@@ -1,5 +1,9 @@
+# RECORDS
 records/*
-!records/.keep
-venv
+!records/test.mgz
+
+# IDE
 .idea
+
+# PYTHON
 __pycache__

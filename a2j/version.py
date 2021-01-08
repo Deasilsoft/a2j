@@ -1,1 +1,2 @@
-version = "1.0"
+def version():
+    return "2.0"
