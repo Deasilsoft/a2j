@@ -51,4 +51,4 @@ def parse(record, commands):
             "errno": 0
         })
 
-    return json.dumps(data, indent=4, cls=JSONEncoder)
+    return data

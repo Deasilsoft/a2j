@@ -1,9 +1,11 @@
 import json
+import os
 import time
 
 from flask import Response, Flask, request
 
 from a2j.commands import get_commands
+from a2j.encoder import JSONEncoder
 from a2j.parse import parse
 from a2j.version import version
 
@@ -28,21 +30,42 @@ def v1():
 
 
 @app.route("/a2j/v1/parse/", methods=["GET"])
-def v1_parse():
+def v1_parse_empty():
     return Response(json.dumps({
         "endpoints": list(get_commands().keys()),
-        "parameters": ["record"],
+        "arguments": ["record"],
     }), mimetype="application/json")
 
 
 @app.route("/a2j/v1/parse/<path:commands>/", methods=["GET"])
-def v1_parse_commands(commands):
+def v1_parse(commands):
+    endpoints = []
+    commands = commands.split("/")
+
+    for command in get_commands().keys():
+        if command not in commands:
+            endpoints.append(command)
+
     if "record" in request.args:
-        return Response(parse(request.args.get("record"), commands.split("/")), mimetype="application/json")
+        data = parse(request.args.get("record"), commands)
+
+        data["endpoints"] = endpoints
+        data["arguments"] = []
+
+        for argument in request.args.keys():
+            if argument != "record":
+                data["errors"].append({
+                    "message": "Argument does not exist: " + argument,
+                    "errno": 3
+                })
+
+        return Response(json.dumps(data, cls=JSONEncoder), mimetype="application/json")
+
     else:
         return Response(json.dumps({
-            "parameters": ["record"],
+            "endpoints": endpoints,
+            "arguments": ["record"],
         }), mimetype="application/json")
 
 
-app.run(debug=False, port=4000)
+app.run(host="0.0.0.0", debug=os.getenv("DEBUG").lower() in ["true", "yes", "1"], port=8080)

@@ -1,19 +1,24 @@
 FROM python:alpine
-
 RUN apk update \
  && apk upgrade \
  && apk add build-base
 
-# SET HOME ENVIRONMENT
+# UPGRADE PIP
+RUN python -m pip install --upgrade pip
+
+# SET ENVIRONMENT VARIABLES
 ENV HOME=/home/a2j
+ENV DEBUG=TRUE
+
+# SETUP WORK DIRECTORY
 WORKDIR ${HOME}
 ADD . $HOME
 
-# INSTALL REQUIREMENTS
-RUN pip install -r requirements.txt
+# INSTALL PYTHON REQUIREMENTS; CACHE IT
+RUN --mount=type=cache,target=.cache/pip pip install -r requirements.txt
+
+# EXPOSE PORT
+EXPOSE 8080
 
 # RUN SERVER
-RUN python app.py
-
-# EXPOSE PORT 4000
-EXPOSE 4000
+CMD python app.py
