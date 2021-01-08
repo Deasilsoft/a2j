@@ -1,13 +1,11 @@
 name: ao2record-to-json
-
 on: [ push ]
-
 jobs:
-  build:
-
+  main:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v2
       - name: Installing docker...
         run: sudo curl -sSL https://get.docker.com/ | sh
       - name: Building image...
