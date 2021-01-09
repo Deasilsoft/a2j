@@ -17,10 +17,22 @@ An Age of Empires II record analyzing tool used to convert AoE2 records to JSON.
 
 ## Usage
 
-    curl localhost:8080/a2j/
-    curl localhost:8080/a2j/v1/
-    curl localhost:8080/a2j/v1/parse/
+This is an API ran as a Docker container. Mount to the `records` directory to add and remove records from the API.
+
+### Endpoints
+
+    localhost:8080/a2j/
+    localhost:8080/a2j/v1/
+    localhost:8080/a2j/v1/parse/
+
+There is a list of endpoints available from `localhost:8080/a2j/v1/parse/` which are available in the `endpoints`
+array. These endpoints can be added recursively to retrieve the data you desire. By adding the `record` argument you
+select the record to read your data from.
 
 ## Example
 
+This example will retrieve all the `teams` and `players` from the `test.mgz` record.
+
     curl localhost:8080/a2j/v1/parse/teams/players/?record=test.mgz
+
+The output is a JSON object.
