@@ -3,7 +3,11 @@ import subprocess
 
 
 def test_record_does_not_exist():
-    cls = ["curl", "http://localhost:4000/a2j/v1/parse/not-tested/?record=does-not-exist"]
+    cls = [
+        "curl",
+        "http://localhost:8080/a2j/v1/parse/not-tested/?record=does-not-exist"
+    ]
+
     out, err = subprocess.Popen(cls, stdout=subprocess.PIPE).communicate()
     raw = ""
 
@@ -20,7 +24,11 @@ def test_record_does_not_exist():
 
 
 def test_command_does_not_exist():
-    cls = ["curl", "http://localhost:4000/a2j/v1/parse/not-real/fake-command/123/?record=records/test.mgz"]
+    cls = [
+        "curl",
+        "http://localhost:8080/a2j/v1/parse/not-real/fake-command/123/?record=records/test.mgz"
+    ]
+
     out, err = subprocess.Popen(cls, stdout=subprocess.PIPE).communicate()
     raw = ""
 

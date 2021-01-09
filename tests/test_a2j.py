@@ -12,7 +12,11 @@ def initialize():
     global PARSED, READ, INITIALIZED
 
     if INITIALIZED is False:
-        cls = ["curl", "http://localhost:4000/a2j/v1/parse/" + "/".join(get_commands().keys()) + "/?record=records/test.mgz"]
+        cls = [
+            "curl",
+            "http://localhost:8080/a2j/v1/parse/" + "/".join(get_commands().keys()) + "/?record=records/test.mgz"
+        ]
+
         out, err = subprocess.Popen(cls, stdout=subprocess.PIPE).communicate()
         data = ""
 
