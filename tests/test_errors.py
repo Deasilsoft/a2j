@@ -26,7 +26,7 @@ def test_record_does_not_exist():
 def test_command_does_not_exist():
     cls = [
         "curl",
-        "http://localhost:8080/a2j/v1/parse/not-real/fake-command/123/?record=records/test.mgz"
+        "http://localhost:8080/a2j/v1/parse/not-real/fake-command/123/?record=test.mgz"
     ]
 
     out, err = subprocess.Popen(cls, stdout=subprocess.PIPE).communicate()

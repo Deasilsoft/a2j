@@ -14,7 +14,7 @@ def initialize():
     if INITIALIZED is False:
         cls = [
             "curl",
-            "http://localhost:8080/a2j/v1/parse/" + "/".join(get_commands().keys()) + "/?record=records/test.mgz"
+            "http://localhost:8080/a2j/v1/parse/" + "/".join(get_commands().keys()) + "/?record=test.mgz"
         ]
 
         out, err = subprocess.Popen(cls, stdout=subprocess.PIPE).communicate()
