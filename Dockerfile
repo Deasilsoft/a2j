@@ -4,7 +4,7 @@ RUN apk update \
  && apk add build-base
 
 # UPGRADE PIP
-RUN python -m pip install --upgrade pip
+RUN python -m pip install --upgrade pip setuptools
 
 # SET ENVIRONMENT VARIABLES
 ENV HOME=/home/a2j
