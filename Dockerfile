@@ -1,10 +1,6 @@
-FROM python:alpine
-RUN apk update \
- && apk upgrade \
- && apk add build-base
-
-# UPGRADE PIP
-RUN python -m pip install --upgrade pip setuptools
+FROM python:slim
+RUN apt-get update \
+ && apt-get upgrade -y
 
 # SET ENVIRONMENT VARIABLES
 ENV HOME=/home/a2j
