@@ -15,7 +15,7 @@ WORKDIR ${HOME}
 ADD . $HOME
 
 # INSTALL PYTHON REQUIREMENTS; CACHE IT
-RUN --mount=type=cache,target=.cache/pip pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
 # EXPOSE PORT
 EXPOSE 8080
