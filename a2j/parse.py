@@ -50,4 +50,10 @@ def parse(record: str, commands: list) -> dict:
                 "errno": 0
             })
 
+    else:
+        data["errors"].append({
+            "message": "Injection attempt detected: " + record,
+            "errno": 100
+        })
+
     return data
