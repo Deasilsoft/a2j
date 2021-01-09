@@ -1,10 +1,10 @@
-FROM python:slim
-RUN apt-get update \
- && apt-get upgrade -y
+FROM python:alpine
+RUN apk update \
+ && apk upgrade \
+ && apk add build-base
 
 # SET ENVIRONMENT VARIABLES
 ENV HOME=/home/a2j
-ENV DEBUG=TRUE
 
 # SETUP WORK DIRECTORY
 WORKDIR ${HOME}

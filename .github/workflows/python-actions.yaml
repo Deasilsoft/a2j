@@ -14,7 +14,7 @@ jobs:
         run: docker run -d --name a2j deasilsoft/a2j
       - name: Installing test environment...
         run: |
-          docker exec a2j apt-get install curl -y
+          docker exec a2j apk add curl
           docker exec a2j pip install pytest
       - name: Running tests...
         run: docker exec a2j python -m pytest

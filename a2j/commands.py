@@ -1,7 +1,7 @@
 from mgz.summary import Summary
 
 
-def get_commands():
+def get_commands() -> dict:
     return {
         # META
         "completed": Summary.get_completed,
@@ -35,14 +35,14 @@ def get_commands():
     }
 
 
-def get_restored(summary):
+def get_restored(summary: Summary) -> dict:
     return {
         "is_restored": summary.get_restored()[0],
         "time": summary.get_restored()[1],
     }
 
 
-def get_version(summary):
+def get_version(summary: Summary) -> dict:
     return {
         "recanalyst": summary.get_version()[0],
         "game": summary.get_version()[1],

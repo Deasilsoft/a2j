@@ -1,5 +1,4 @@
 import json
-import os
 import time
 
 from flask import Response, Flask, request
@@ -14,7 +13,7 @@ startTime = time.time()
 
 
 @app.route("/a2j/", methods=["GET"])
-def index():
+def index() -> Response:
     return Response(json.dumps({
         "endpoints": ["v1"],
         "version": version(),
@@ -23,14 +22,14 @@ def index():
 
 
 @app.route("/a2j/v1/", methods=["GET"])
-def v1():
+def v1() -> Response:
     return Response(json.dumps({
         "endpoints": ["parse"]
     }), mimetype="application/json")
 
 
 @app.route("/a2j/v1/parse/", methods=["GET"])
-def v1_parse_empty():
+def v1_parse_empty() -> Response:
     return Response(json.dumps({
         "endpoints": list(get_commands().keys()),
         "arguments": ["record"],
@@ -38,7 +37,7 @@ def v1_parse_empty():
 
 
 @app.route("/a2j/v1/parse/<path:commands>/", methods=["GET"])
-def v1_parse(commands):
+def v1_parse(commands: str) -> Response:
     endpoints = []
     commands = commands.split("/")
 
@@ -68,4 +67,4 @@ def v1_parse(commands):
         }), mimetype="application/json")
 
 
-app.run(host="0.0.0.0", debug=os.getenv("DEBUG").lower() in ["true", "yes", "1"], port=8080)
+app.run(host="0.0.0.0", debug=False, port=8080)

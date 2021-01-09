@@ -23,4 +23,4 @@ An Age of Empires II record analyzing tool used to convert AoE2 records to JSON.
 
 ## Example
 
-    curl localhost:8080/a2j/v1/parse/teams/players/?record=records/test.mgz
+    curl localhost:8080/a2j/v1/parse/teams/players/?record=test.mgz
