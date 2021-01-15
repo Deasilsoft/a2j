@@ -22,19 +22,19 @@ class JSONEncoder(json.JSONEncoder):
                 "hex": obj.hexdigest(),
             }
 
-        elif isinstance(obj, mgz.Version):
+        if isinstance(obj, mgz.Version):
             return {
                 "name": obj.name,
                 "value": obj.value,
             }
 
-        elif isinstance(obj, mgz.summary.chat.Chat):
+        if isinstance(obj, mgz.summary.chat.Chat):
             return {
                 "name": obj.name,
                 "value": obj.value,
             }
 
-        elif isinstance(obj, bytes):
+        if isinstance(obj, bytes):
             return obj.decode("unicode_escape")
 
         return json.JSONEncoder.default(self, obj)

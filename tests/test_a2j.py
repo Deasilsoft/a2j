@@ -2,157 +2,90 @@
 Testing aoe2record-to-json core functionality.
 """
 import json
-import subprocess
+import unittest
 
 from a2j.commands import get_commands
-
-PARSED = {}
-READ = {}
-INITIALIZED = False
+from tests.util import execute
 
 
-def initialize():
-    """
-    Initialize testing environment.
-    """
-    global PARSED, READ, INITIALIZED
+class test_a2j(unittest.TestCase):
+    parsed = execute([
+        "curl",
+        "http://localhost:8080/a2j/v1/parse/" + "/".join(get_commands().keys()) + "/?record=test.mgz"
+    ])
 
-    if INITIALIZED is False:
-        cls = [
-            "curl",
-            "http://localhost:8080/a2j/v1/parse/" + "/".join(get_commands().keys()) + "/?record=test.mgz"
-        ]
+    with open("tests/data/test.json", "r") as file:
+        read = json.loads(file.read())
+        file.close()
 
-        out, err = subprocess.Popen(cls, stdout=subprocess.PIPE).communicate()
-        data = ""
+    def test_completed(self):
+        assert self.parsed["completed"] == self.read["completed"]
 
-        for line in out.splitlines():
-            data += line.decode("utf-8")
+    def test_dataset(self):
+        assert self.parsed["dataset"] == self.read["dataset"]
 
-        PARSED = json.loads(data)
+    def test_encoding(self):
+        assert self.parsed["encoding"] == self.read["encoding"]
 
-        with open("tests/data/test.json", "r") as file:
-            READ = json.loads(file.read())
-            file.close()
+    def test_file_hash(self):
+        assert self.parsed["file_hash"] == self.read["file_hash"]
 
-        INITIALIZED = True
+    def test_hash(self):
+        assert self.parsed["hash"] == self.read["hash"]
 
+    def test_language(self):
+        assert self.parsed["language"] == self.read["language"]
 
-def test_completed():
-    initialize()
-    assert PARSED["completed"] == READ["completed"]
+    def test_mirror(self):
+        assert self.parsed["mirror"] == self.read["mirror"]
 
+    def test_owner(self):
+        assert self.parsed["owner"] == self.read["owner"]
 
-def test_dataset():
-    initialize()
-    assert PARSED["dataset"] == READ["dataset"]
+    def test_platform(self):
+        assert self.parsed["platform"] == self.read["platform"]
 
+    def test_restored(self):
+        assert self.parsed["restored"] == self.read["restored"]
 
-def test_encoding():
-    initialize()
-    assert PARSED["encoding"] == READ["encoding"]
+    def test_version(self):
+        assert self.parsed["version"] == self.read["version"]
 
+    def test_chat(self):
+        assert self.parsed["chat"] == self.read["chat"]
 
-def test_file_hash():
-    initialize()
-    assert PARSED["file_hash"] == READ["file_hash"]
+    def test_diplomacy(self):
+        assert self.parsed["diplomacy"] == self.read["diplomacy"]
 
+    def test_players(self):
+        assert self.parsed["players"] == self.read["players"]
 
-def test_hash():
-    initialize()
-    assert PARSED["hash"] == READ["hash"]
+    def test_profiles(self):
+        assert self.parsed["profiles"] == self.read["profiles"]
 
+    def test_ratings(self):
+        assert self.parsed["ratings"] == self.read["ratings"]
 
-def test_language():
-    initialize()
-    assert PARSED["language"] == READ["language"]
+    def test_teams(self):
+        assert self.parsed["teams"] == self.read["teams"]
 
+    def test_achievements(self):
+        assert self.parsed["achievements"] == self.read["achievements"]
 
-def test_mirror():
-    initialize()
-    assert PARSED["mirror"] == READ["mirror"]
+    def test_duration(self):
+        assert self.parsed["duration"] == self.read["duration"]
 
+    def test_map(self):
+        assert self.parsed["map"] == self.read["map"]
 
-def test_owner():
-    initialize()
-    assert PARSED["owner"] == READ["owner"]
+    def test_objects(self):
+        assert self.parsed["objects"] == self.read["objects"]
 
+    def test_postgame(self):
+        assert self.parsed["postgame"] == self.read["postgame"]
 
-def test_platform():
-    initialize()
-    assert PARSED["platform"] == READ["platform"]
+    def test_settings(self):
+        assert self.parsed["settings"] == self.read["settings"]
 
-
-def test_restored():
-    initialize()
-    assert PARSED["restored"] == READ["restored"]
-
-
-def test_version():
-    initialize()
-    assert PARSED["version"] == READ["version"]
-
-
-def test_chat():
-    initialize()
-    assert PARSED["chat"] == READ["chat"]
-
-
-def test_diplomacy():
-    initialize()
-    assert PARSED["diplomacy"] == READ["diplomacy"]
-
-
-def test_players():
-    initialize()
-    assert PARSED["players"] == READ["players"]
-
-
-def test_profiles():
-    initialize()
-    assert PARSED["profiles"] == READ["profiles"]
-
-
-def test_ratings():
-    initialize()
-    assert PARSED["ratings"] == READ["ratings"]
-
-
-def test_teams():
-    initialize()
-    assert PARSED["teams"] == READ["teams"]
-
-
-def test_achievements():
-    initialize()
-    assert PARSED["achievements"] == READ["achievements"]
-
-
-def test_duration():
-    initialize()
-    assert PARSED["duration"] == READ["duration"]
-
-
-def test_map():
-    initialize()
-    assert PARSED["map"] == READ["map"]
-
-
-def test_objects():
-    initialize()
-    assert PARSED["objects"] == READ["objects"]
-
-
-def test_postgame():
-    initialize()
-    assert PARSED["postgame"] == READ["postgame"]
-
-
-def test_settings():
-    initialize()
-    assert PARSED["settings"] == READ["settings"]
-
-
-def test_start_time():
-    initialize()
-    assert PARSED["start_time"] == READ["start_time"]
+    def test_start_time(self):
+        assert self.parsed["start_time"] == self.read["start_time"]

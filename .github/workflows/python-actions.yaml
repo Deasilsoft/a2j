@@ -6,15 +6,13 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      - name: Installing docker...
-        run: sudo curl -sSL https://get.docker.com/ | sh
-      - name: Building image...
+      - name: Build Image
         run: docker build -t deasilsoft/a2j .
-      - name: Running container...
+      - name: Run Container
         run: docker run -d --name a2j deasilsoft/a2j
-      - name: Installing test environment...
+      - name: Install Test Environment
         run: |
-          docker exec a2j apk add curl
+          docker exec a2j apk --no-cache add curl
           docker exec a2j pip install pytest
-      - name: Running tests...
+      - name: Run Tests
         run: docker exec a2j python -m pytest

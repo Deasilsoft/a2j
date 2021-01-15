@@ -77,13 +77,12 @@ def v1_clean() -> Response:
             "cleaned": a2j.cache.clean(record)
         }), mimetype="application/json")
 
-    else:
-        return Response(json.dumps({
-            "endpoints": [],
-            "arguments": ["record"],
-            "success": False,
-            "cleaned": 0
-        }), mimetype="application/json")
+    return Response(json.dumps({
+        "endpoints": [],
+        "arguments": ["record"],
+        "success": False,
+        "cleaned": 0
+    }), mimetype="application/json")
 
 
 @app.route("/a2j/v1/parse/<path:commands>/", methods=["GET"])
@@ -118,11 +117,10 @@ def v1_parse(commands: str) -> Response:
 
         return Response(json.dumps(data, cls=JSONEncoder), mimetype="application/json")
 
-    else:
-        return Response(json.dumps({
-            "endpoints": endpoints,
-            "arguments": ["record"],
-        }), mimetype="application/json")
+    return Response(json.dumps({
+        "endpoints": endpoints,
+        "arguments": ["record"],
+    }), mimetype="application/json")
 
 
 # START THE APPLICATION ON PORT 8080

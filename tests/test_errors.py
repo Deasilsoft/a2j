@@ -1,23 +1,15 @@
 """
 Testing aoe2record-to-json errors.
 """
-import json
-import subprocess
+
+from tests.util import execute
 
 
 def test_record_does_not_exist():
-    cls = [
+    data = execute([
         "curl",
         "http://localhost:8080/a2j/v1/parse/not-tested/?record=does-not-exist"
-    ]
-
-    out, err = subprocess.Popen(cls, stdout=subprocess.PIPE).communicate()
-    raw = ""
-
-    for line in out.splitlines():
-        raw += line.decode("utf-8")
-
-    data = json.loads(raw)
+    ])
 
     assert len(data["errors"]) == 1
 
@@ -27,18 +19,10 @@ def test_record_does_not_exist():
 
 
 def test_command_does_not_exist():
-    cls = [
+    data = execute([
         "curl",
         "http://localhost:8080/a2j/v1/parse/not-real/fake-command/123/?record=test.mgz"
-    ]
-
-    out, err = subprocess.Popen(cls, stdout=subprocess.PIPE).communicate()
-    raw = ""
-
-    for line in out.splitlines():
-        raw += line.decode("utf-8")
-
-    data = json.loads(raw)
+    ])
 
     assert len(data["errors"]) == 3
 
@@ -56,18 +40,10 @@ def test_command_does_not_exist():
 
 
 def test_record_injection():
-    cls = [
+    data = execute([
         "curl",
         "http://localhost:8080/a2j/v1/parse/completed/?record=../injection.py"
-    ]
-
-    out, err = subprocess.Popen(cls, stdout=subprocess.PIPE).communicate()
-    raw = ""
-
-    for line in out.splitlines():
-        raw += line.decode("utf-8")
-
-    data = json.loads(raw)
+    ])
 
     assert len(data["errors"]) == 1
 

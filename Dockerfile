@@ -1,7 +1,6 @@
 FROM python:alpine
-RUN apk update \
- && apk upgrade \
- && apk add build-base
+RUN apk --no-cache update \
+ && apk --no-cache add build-base
 
 # SET ENVIRONMENT VARIABLES
 ENV HOME=/home/a2j
