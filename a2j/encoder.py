@@ -1,3 +1,6 @@
+"""
+aoe2record-to-json JSONEncoder class.
+"""
 import _hashlib
 import json
 
@@ -6,7 +9,13 @@ import mgz.summary
 
 
 class JSONEncoder(json.JSONEncoder):
-    def default(self, obj):
+    """A JSONEncoder for parsing Age of Empires II records."""
+
+    def default(self, obj: any) -> any:
+        """
+        :param obj:
+        :rtype:
+        """
         if isinstance(obj, _hashlib.HASH):
             return {
                 "type": obj.name,

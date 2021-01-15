@@ -1,2 +1,11 @@
+"""
+aoe2record-to-json version functions.
+"""
+
+
 def version() -> str:
-    return "2.0"
+    """
+    :return: Version string of aoe2record-to-json.
+    :rtype: str
+    """
+    return "2.1"

@@ -1,3 +1,6 @@
+"""
+Testing aoe2record-to-json errors.
+"""
 import json
 import subprocess
 
@@ -41,7 +44,7 @@ def test_command_does_not_exist():
 
     assert len(data["errors"][0]) == 2
     assert data["errors"][0]["errno"] == 1
-    assert data["errors"][0]["message"] == "Command does not exist: not-real"
+    assert data["errors"][0]["message"] == "Command does not exist: 123"
 
     assert len(data["errors"][1]) == 2
     assert data["errors"][1]["errno"] == 1
@@ -49,7 +52,7 @@ def test_command_does_not_exist():
 
     assert len(data["errors"][2]) == 2
     assert data["errors"][2]["errno"] == 1
-    assert data["errors"][2]["message"] == "Command does not exist: 123"
+    assert data["errors"][2]["message"] == "Command does not exist: not-real"
 
 
 def test_record_injection():

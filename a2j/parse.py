@@ -1,54 +1,85 @@
+"""
+aoe2record-to-json parsing functions.
+"""
 import mgz.summary
 
+import a2j.cache
 import a2j.util
 from a2j.commands import get_commands
 
 
 def parse(record: str, commands: list) -> dict:
+    """
+    Parse Age of Empires II record and retrieve JSON object built on the user-supplied commands.
+
+    :param (str) record: User-supplied record file.
+    :param (list) commands: User-supplied commands.
+    :return: JSON object
+    :rtype: dict
+    """
     data = {
         "errors": []
     }
 
+    # SORT COMMANDS TO HAVE A REPEATABLE STRUCTURE OF THE JSON OBJECT
+    commands.sort()
+
+    # CHECK IF USER-INPUT IS VALID; THEN OPEN THE RECORD FILE
     if a2j.util.is_record(record):
-        try:
-            with open(a2j.util.record(record), "rb") as file:
-                perform = False
 
-                for command in commands:
-                    if command in get_commands():
-                        perform = True
+        # FIRST GET CACHE IF AVAILABLE
+        cache, cached = a2j.cache.get(record, commands)
 
-                    else:
-                        data["errors"].append({
-                            "message": "Command does not exist: " + command,
-                            "errno": 1
-                        })
+        if cached:
+            data = cache
 
-                if perform:
-                    summary = None
+        else:
+            try:
+                with open(a2j.util.record(record), "rb") as file:
+                    perform = False
 
-                    try:
-                        mgz.summary.LOGGER.setLevel(9001)
-                        summary = mgz.summary.Summary(file)
+                    # CHECK IF ANY COMMAND IS VALID; TO PREVENT PARSING THE RECORD WITH NO OUTPUT
+                    for command in commands:
+                        if command in get_commands():
+                            perform = True
 
-                    except Exception as e:
-                        data["errors"].append({
-                            "message": "Parsing AoE2 record stopped with this error: " + str(e),
-                            "errno": 2
-                        })
+                        else:
+                            data["errors"].append({
+                                "message": "Command does not exist: " + command,
+                                "errno": 1
+                            })
 
-                    if summary is not None:
-                        for command in commands:
-                            if command in get_commands():
-                                data[command] = get_commands().get(command)(summary)
+                    # GO AHEAD AND PERFORM THE RECORD PARSING
+                    if perform:
+                        summary = None
 
-                file.close()
+                        try:
+                            # SET THE LOGGER TO AN IMPOSSIBLY HIGH LEVEL TO PREVENT WEIRD OUTPUT
+                            mgz.summary.LOGGER.setLevel(9001)
+                            summary = mgz.summary.Summary(file)
 
-        except FileNotFoundError as e:
-            data["errors"].append({
-                "message": "Record does not exist: " + e.filename,
-                "errno": 0
-            })
+                        except Exception as e:
+                            data["errors"].append({
+                                "message": "Parsing AoE2 record stopped with this error: " + str(e),
+                                "errno": 2
+                            })
+
+                        # PUT THE RECORD DATA INSIDE OUR ARRAY
+                        if summary is not None:
+                            for command in commands:
+                                if command in get_commands():
+                                    data[command] = get_commands().get(command)(summary)
+
+                    file.close()
+
+            except FileNotFoundError as e:
+                data["errors"].append({
+                    "message": "Record does not exist: " + e.filename,
+                    "errno": 0
+                })
+
+            # PUT TO CACHE
+            a2j.cache.put(record, commands, data)
 
     else:
         data["errors"].append({

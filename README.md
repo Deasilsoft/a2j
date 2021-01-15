@@ -24,15 +24,27 @@ This is an API ran as a Docker container. Mount to the `records` directory to ad
     localhost:8080/a2j/
     localhost:8080/a2j/v1/
     localhost:8080/a2j/v1/parse/
+    localhost:8080/a2j/v1/clean/
 
 There is a list of endpoints available from `localhost:8080/a2j/v1/parse/` which are available in the `endpoints`
-array. These endpoints can be added recursively to retrieve the data you desire. By adding the `record` argument you
-select the record to read your data from.
+array. These endpoints can be added recursively to retrieve the data you desire.
 
-## Example
+By adding the `record` argument you select the Age of Empires II record to parse or to clean.
+
+## Examples
+
+### Parse
 
 This example will retrieve all the `teams` and `players` from the `test.mgz` record.
 
     curl localhost:8080/a2j/v1/parse/teams/players/?record=test.mgz
 
 The output is a JSON object.
+
+### Clean
+
+To clean all cached data from a record you can do the following.
+
+    curl localhost:8080/a2j/v1/clean/?record=test.mgz
+
+This is useful in cases where you replace a record and want to generate a new cache hierarchy for the new data.

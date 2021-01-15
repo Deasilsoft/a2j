@@ -1,3 +1,6 @@
+"""
+Testing aoe2record-to-json core functionality.
+"""
 import json
 import subprocess
 
@@ -9,6 +12,9 @@ INITIALIZED = False
 
 
 def initialize():
+    """
+    Initialize testing environment.
+    """
     global PARSED, READ, INITIALIZED
 
     if INITIALIZED is False:

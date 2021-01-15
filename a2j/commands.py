@@ -1,7 +1,14 @@
+"""
+aoe2record-to-json command data and functions.
+"""
 from mgz.summary import Summary
 
 
 def get_commands() -> dict:
+    """
+    :return: Object with available commands.
+    :rtype: dict
+    """
     return {
         # META
         "completed": Summary.get_completed,
@@ -36,6 +43,10 @@ def get_commands() -> dict:
 
 
 def get_restored(summary: Summary) -> dict:
+    """
+    :return: Objectified restored array from record.
+    :rtype: dict
+    """
     return {
         "is_restored": summary.get_restored()[0],
         "time": summary.get_restored()[1],
@@ -43,6 +54,10 @@ def get_restored(summary: Summary) -> dict:
 
 
 def get_version(summary: Summary) -> dict:
+    """
+    :return: Objectified version array from record.
+    :rtype: dict
+    """
     return {
         "recanalyst": summary.get_version()[0],
         "game": summary.get_version()[1],
