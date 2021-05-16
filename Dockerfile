@@ -1,5 +1,6 @@
 FROM python:alpine
-RUN apk --no-cache update \
+RUN apk --no-cache upgrade \
+ && apk --no-cache update \
  && apk --no-cache add build-base
 
 # SET ENVIRONMENT VARIABLES
