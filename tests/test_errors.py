@@ -6,10 +6,13 @@ from tests.util import execute
 
 
 def test_record_does_not_exist():
-    data = execute([
+    data, err = execute([
         "curl",
         "http://localhost:8080/a2j/v1/parse/not-tested/?record=does-not-exist"
     ])
+
+    if err is not None:
+        raise RuntimeError("Error while parsing from web API: " + err)
 
     assert len(data["errors"]) == 1
 
@@ -19,10 +22,13 @@ def test_record_does_not_exist():
 
 
 def test_command_does_not_exist():
-    data = execute([
+    data, err = execute([
         "curl",
         "http://localhost:8080/a2j/v1/parse/not-real/fake-command/123/?record=test.mgz"
     ])
+
+    if err is not None:
+        raise RuntimeError("Error while parsing from web API: " + err)
 
     assert len(data["errors"]) == 3
 
@@ -40,10 +46,13 @@ def test_command_does_not_exist():
 
 
 def test_record_injection():
-    data = execute([
+    data, err = execute([
         "curl",
         "http://localhost:8080/a2j/v1/parse/completed/?record=../injection.py"
     ])
+
+    if err is not None:
+        raise RuntimeError("Error while parsing from web API: " + err)
 
     assert len(data["errors"]) == 1
 
