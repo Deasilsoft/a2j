@@ -8,12 +8,17 @@ from a2j.commands import get_commands
 from tests.util import execute
 
 
-class test_a2j(unittest.TestCase):
-    parsed = execute([
+class TestA2J(unittest.TestCase):
+    # PARSE FROM WEB API
+    parsed, err = execute([
         "curl",
         "http://localhost:8080/a2j/v1/parse/" + "/".join(get_commands().keys()) + "/?record=test.mgz"
     ])
 
+    if err is not None:
+        raise RuntimeError("Error while parsing from web API: " + err)
+
+    # READ FROM FILE
     with open("tests/data/test.json", "r") as file:
         read = json.loads(file.read())
         file.close()
