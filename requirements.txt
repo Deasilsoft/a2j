@@ -1,2 +1,2 @@
-mgz~=1.4.5
-Flask~=1.1.2
+mgz
+Flask

@@ -28,7 +28,7 @@ def index() -> Response:
     return Response(json.dumps({
         "endpoints": ["v1"],
         "version": version(),
-        "uptime": int(time.time() - startTime),
+        "uptime": time.time() - startTime,
     }), mimetype="application/json")
 
 

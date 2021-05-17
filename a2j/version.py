@@ -8,4 +8,4 @@ def version() -> str:
     :return: Version string of aoe2record-to-json.
     :rtype: str
     """
-    return "2.1"
+    return "2.2B"
