@@ -3,6 +3,9 @@ on: [ push ]
 jobs:
   main:
     runs-on: ubuntu-latest
+    env:
+      HOME: /home/a2j
+      VENV: $HOME/venv
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -13,6 +16,6 @@ jobs:
       - name: Install Test Environment
         run: |
           docker exec a2j apk --no-cache add curl
-          docker exec a2j pip install pytest
+          docker exec a2j $VENV/bin/pip install pytest
       - name: Run Tests
-        run: docker exec a2j python -m pytest
+        run: docker exec a2j $VENV/bin/python -m pytest
