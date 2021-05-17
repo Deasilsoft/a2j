@@ -3,19 +3,14 @@ on: [ push ]
 jobs:
   main:
     runs-on: ubuntu-latest
-    env:
-      HOME: /home/a2j
-      VENV: /home/a2j/venv
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      - name: Build Image
-        run: docker build -t deasilsoft/a2j .
-      - name: Run Container
-        run: docker run -d --name a2j deasilsoft/a2j
+      - name: Build & Run Container
+        run: docker-compose up --build
       - name: Install Test Environment
         run: |
           docker exec a2j apk --no-cache add curl
-          docker exec a2j $VENV/bin/pip install pytest
+          docker exec a2j pip install pytest
       - name: Run Tests
-        run: docker exec a2j $VENV/bin/python -m pytest
+        run: docker exec a2j python -m pytest
