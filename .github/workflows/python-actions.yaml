@@ -7,7 +7,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
       - name: Build & Run Container
-        run: docker-compose up --build
+        run: docker-compose up --build -d
       - name: Install Test Environment
         run: |
           docker exec a2j apk --no-cache add curl
