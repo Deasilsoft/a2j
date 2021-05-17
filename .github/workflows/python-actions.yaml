@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HOME: /home/a2j
-      VENV: $HOME/venv
+      VENV: /home/a2j/venv
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
