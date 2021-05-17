@@ -1,4 +1,4 @@
-name: github_action
+name: aoe2record-to-json
 on: [ push ]
 jobs:
   main:
@@ -10,7 +10,7 @@ jobs:
         run: docker-compose up --build -d
       - name: Install Test Environment
         run: |
-          docker exec github_action_a2j_1 apk --no-cache add curl
-          docker exec github_action_a2j_1 pip install pytest
+          docker exec aoe2record-to-json_a2j_1 apk --no-cache add curl
+          docker exec aoe2record-to-json_a2j_1 pip install pytest
       - name: Run Tests
-        run: docker exec github_action_a2j_1 python -m pytest
+        run: docker exec aoe2record-to-json_a2j_1 python -m pytest
