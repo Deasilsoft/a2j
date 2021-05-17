@@ -10,7 +10,7 @@ jobs:
         run: docker-compose up --build -d
       - name: Install Test Environment
         run: |
-          docker exec a2j apk --no-cache add curl
-          docker exec a2j pip install pytest
+          docker exec a2j_1 apk --no-cache add curl
+          docker exec a2j_1 pip install pytest
       - name: Run Tests
-        run: docker exec a2j python -m pytest
+        run: docker exec a2j_1 python -m pytest
