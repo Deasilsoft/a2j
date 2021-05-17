@@ -1,7 +1,5 @@
 FROM python:alpine
-RUN apk --no-cache upgrade \
- && apk --no-cache update \
- && apk --no-cache add build-base
+RUN ["apk", "--no-cache", "add", "build-base"]
 
 # SET ENVIRONMENT VARIABLES
 ENV HOME=/home/a2j
@@ -11,10 +9,10 @@ WORKDIR ${HOME}
 ADD . $HOME
 
 # INSTALL PYTHON REQUIREMENTS
-RUN pip install -r requirements.txt
+RUN ["pip", "install", "-r", "requirements.txt"]
 
 # EXPOSE PORT
 EXPOSE 8080
 
 # RUN SERVER
-CMD python app.py
+CMD ["python", "app.py"]
