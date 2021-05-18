@@ -4,6 +4,7 @@ Testing util functions.
 import json
 
 import subprocess
+from json.decoder import JSONDecodeError
 
 
 def execute(cls: list):
@@ -30,8 +31,8 @@ def execute(cls: list):
     try:
         data = json.loads(raw)
 
-    # HANDLE ERROR
-    except err:
+    # HANDLE JSON ERROR
+    except JSONDecodeError as err:
         return None, err
 
     # RETURN PARSED JSON
