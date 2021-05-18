@@ -12,7 +12,7 @@ def test_clean():
     ])
 
     if err is not None:
-        raise RuntimeError("Error while parsing from web API: " + err)
+        raise print("Error while parsing from web API: ", err)
 
     assert data["success"] is True
     assert data["cleaned"] == 1
@@ -25,7 +25,7 @@ def test_clean_empty():
     ])
 
     if err is not None:
-        raise RuntimeError("Error while parsing from web API: " + err)
+        raise print("Error while parsing from web API: ", err)
 
     assert data["success"] is True
     assert data["cleaned"] == 0
