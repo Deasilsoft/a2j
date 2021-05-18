@@ -12,7 +12,7 @@ def test_record_does_not_exist():
     ])
 
     if err is not None:
-        raise print("Error while parsing from web API: ", err)
+        print("Error while parsing from web API: ", err)
 
     assert len(data["errors"]) == 1
 
@@ -28,7 +28,7 @@ def test_command_does_not_exist():
     ])
 
     if err is not None:
-        raise print("Error while parsing from web API: ", err)
+        print("Error while parsing from web API: ", err)
 
     assert len(data["errors"]) == 3
 
@@ -52,7 +52,7 @@ def test_record_injection():
     ])
 
     if err is not None:
-        raise print("Error while parsing from web API: ", err)
+        print("Error while parsing from web API: ", err)
 
     assert len(data["errors"]) == 1
 

@@ -16,7 +16,7 @@ class TestA2J(unittest.TestCase):
     ])
 
     if err is not None:
-        raise print("Error while parsing from web API: ", err)
+        print("Error while parsing from web API: ", err)
 
     # READ FROM FILE
     with open("tests/data/test.json", "r") as file:
