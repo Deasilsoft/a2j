@@ -1,14 +1,14 @@
 """
-aoe2record-to-json cache functions.
+a2j CRUD-cache functions.
 """
 import json
 import os
 from pathlib import Path
 
-from a2j.encoder import JSONEncoder
+from . import encoder
 
 
-def put(record: str, commands: list, data: dict):
+def create(record: str, commands: list, data: dict):
     """
     Put JSON object in cache.
 
@@ -16,22 +16,22 @@ def put(record: str, commands: list, data: dict):
     :param (list) commands: User-supplied commands.
     :param (dict) data: JSON object.
     """
-    cache_file = file_path(record, commands)
+    cache_file = get_path(record, commands)
     path = ""
 
     # CREATE MISSING DIRECTORIES
-    for directory in cache_file.split("/")[:-1]:
-        path += "/" + directory
+    for directory in cache_file.split(os.sep)[:-1]:
+        path += os.sep + directory
         if not os.path.exists(path):
             os.mkdir(path)
 
     # DUMP JSON OBJECT INTO FILE
     with open(cache_file, "w") as file:
-        json.dump(data, file, cls=JSONEncoder)
+        json.dump(data, file, cls=encoder.JSONEncoder)
         file.close()
 
 
-def get(record: str, commands: list) -> (dict, bool):
+def read(record: str, commands: list) -> (dict, bool):
     """
     Get JSON object from cache.
 
@@ -40,23 +40,40 @@ def get(record: str, commands: list) -> (dict, bool):
     :return: JSON object, True if cache file exists; otherwise False.
     :rtype: (dict, bool)
     """
-    cache = {}
-    cached = False
-    cache_file = file_path(record, commands)
+    cached_data = {}
+    is_cached = False
+    cache_file = get_path(record, commands)
 
     if os.path.exists(cache_file):
         # IS CACHED
-        cached = True
+        is_cached = True
 
         # LOAD JSON OBJECT FROM FILE
         with open(cache_file, "r") as file:
-            cache = json.load(file)
+            cached_data = json.load(file)
             file.close()
 
-    return cache, cached
+    return cached_data, is_cached
 
 
-def file_path(record: str, commands: list) -> str:
+def delete(record: str) -> int:
+    """
+    Clean up all cached data related to record.
+
+    :param (str) record: User-supplied record file.
+    :return: True if successfully cleaned; otherwise False.
+    :rtype: int
+    """
+    counter = 0
+
+    for file in Path(Path(__file__).parent.parent.absolute() / "cache").rglob(record):
+        os.remove(file)
+        counter += 1
+
+    return counter
+
+
+def get_path(record: str, commands: list) -> str:
     """
     Get path to cache file with data.
 
@@ -67,21 +84,6 @@ def file_path(record: str, commands: list) -> str:
     """
     commands.sort()
 
-    return os.getcwd() + "/cache/" + ("/".join(commands)) + "/" + record
+    print(Path(__file__).parent.parent.absolute() / "cache" / (os.sep.join(commands)) / record)
 
-
-def clean(record: str) -> int:
-    """
-    Clean up all cached data related to record.
-
-    :param (str) record: User-supplied record file.
-    :return: True if successfully cleaned; otherwise False.
-    :rtype: int
-    """
-    counter = 0
-
-    for file in Path(os.getcwd() + "/cache").rglob(record):
-        os.remove(file)
-        counter += 1
-
-    return counter
+    return Path(__file__).parent.parent.absolute() / "cache" / (os.sep.join(commands)) / record

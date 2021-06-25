@@ -7,7 +7,7 @@ import subprocess
 from json.decoder import JSONDecodeError
 
 
-def execute(cls: list):
+def fetch(cls: list):
     """
     :param (list) cls: System commands to execute.
     :return: JSON Object.

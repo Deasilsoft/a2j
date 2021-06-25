@@ -1,20 +1,25 @@
 """
-The aoe2record-to-json Application.
+The a2j app.
+
+TODO: make RESTFUL
 """
 import json
 import time
+from pathlib import Path
 
 from flask import Response, Flask, request
 
+import a2j
 import a2j.cache
-from a2j.commands import get_commands
-from a2j.encoder import JSONEncoder
-from a2j.parse import parse
-from a2j.util import is_record
-from a2j.version import version
+import a2j.commands
+import a2j.encoder
+import a2j.util
 
 app = Flask(__name__)
 startTime = time.time()
+
+with open(Path(__file__).parent.parent.absolute() / "VERSION", "r") as file:
+    version = file.read().strip()
 
 
 @app.route("/a2j/", methods=["GET"])
@@ -27,7 +32,7 @@ def index() -> Response:
     """
     return Response(json.dumps({
         "endpoints": ["v1"],
-        "version": version(),
+        "version": version,
         "uptime": time.time() - startTime,
     }), mimetype="application/json")
 
@@ -54,7 +59,7 @@ def v1_parse_empty() -> Response:
     :rtype: Response
     """
     return Response(json.dumps({
-        "endpoints": list(get_commands().keys()),
+        "endpoints": list(a2j.commands.get_commands().keys()),
         "arguments": ["record"],
     }), mimetype="application/json")
 
@@ -73,8 +78,8 @@ def v1_clean() -> Response:
         return Response(json.dumps({
             "endpoints": [],
             "arguments": [],
-            "success": is_record(record),
-            "cleaned": a2j.cache.clean(record)
+            "success": a2j.util.is_record(record),
+            "cleaned": a2j.cache.delete(record)
         }), mimetype="application/json")
 
     return Response(json.dumps({
@@ -98,24 +103,25 @@ def v1_parse(commands: str) -> Response:
     endpoints = []
     commands = commands.split("/")
 
-    for command in get_commands().keys():
+    for command in a2j.commands.get_commands().keys():
         if command not in commands:
             endpoints.append(command)
 
     if "record" in request.args:
-        data = parse(request.args.get("record"), commands)
+        record = request.args.get("record")
+        data = a2j.parse(record, commands)
 
         data["endpoints"] = endpoints
         data["arguments"] = []
 
-        for argument in request.args.keys():
-            if argument != "record":
+        for arg in request.args.keys():
+            if arg != "record":
                 data["errors"].append({
-                    "message": "Argument does not exist: " + argument,
+                    "message": "Argument does not exist: " + arg,
                     "errno": 3
                 })
 
-        return Response(json.dumps(data, cls=JSONEncoder), mimetype="application/json")
+        return Response(json.dumps(data, cls=a2j.encoder.JSONEncoder), mimetype="application/json")
 
     return Response(json.dumps({
         "endpoints": endpoints,

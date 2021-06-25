@@ -2,11 +2,11 @@
 Testing aoe2record-to-json errors.
 """
 
-from tests.util import execute
+from tests.util import fetch
 
 
 def test_record_does_not_exist():
-    data, err = execute([
+    data, err = fetch([
         "curl",
         "http://localhost:8080/a2j/v1/parse/not-tested/?record=does-not-exist"
     ])
@@ -22,7 +22,7 @@ def test_record_does_not_exist():
 
 
 def test_command_does_not_exist():
-    data, err = execute([
+    data, err = fetch([
         "curl",
         "http://localhost:8080/a2j/v1/parse/not-real/fake-command/123/?record=test.mgz"
     ])
@@ -46,7 +46,7 @@ def test_command_does_not_exist():
 
 
 def test_record_injection():
-    data, err = execute([
+    data, err = fetch([
         "curl",
         "http://localhost:8080/a2j/v1/parse/completed/?record=../injection.py"
     ])

@@ -1,5 +1,5 @@
 """
-aoe2record-to-json command data and functions.
+a2j commands functions.
 """
 from mgz.summary import Summary
 
@@ -20,8 +20,8 @@ def get_commands() -> dict:
         "mirror": Summary.get_mirror,
         "owner": Summary.get_owner,
         "platform": Summary.get_platform,
-        "restored": get_restored,
-        "version": get_version,
+        "restored": __get_restored,
+        "version": __get_version,
 
         # PLAYERS
         "chat": Summary.get_chat,
@@ -42,7 +42,7 @@ def get_commands() -> dict:
     }
 
 
-def get_restored(summary: Summary) -> dict:
+def __get_restored(summary: Summary) -> dict:
     """
     :return: Objectified restored array from record.
     :rtype: dict
@@ -53,7 +53,7 @@ def get_restored(summary: Summary) -> dict:
     }
 
 
-def get_version(summary: Summary) -> dict:
+def __get_version(summary: Summary) -> dict:
     """
     :return: Objectified version array from record.
     :rtype: dict

@@ -2,11 +2,11 @@
 Testing aoe2record-to-json caching.
 """
 
-from tests.util import execute
+from tests.util import fetch
 
 
 def test_clean():
-    data, err = execute([
+    data, err = fetch([
         "curl",
         "http://localhost:8080/a2j/v1/clean/?record=test.mgz"
     ])
@@ -19,7 +19,7 @@ def test_clean():
 
 
 def test_clean_empty():
-    data, err = execute([
+    data, err = fetch([
         "curl",
         "http://localhost:8080/a2j/v1/clean/?record=test.mgz"
     ])

@@ -2,26 +2,33 @@
 Testing aoe2record-to-json core functionality.
 """
 import json
+import os
 import unittest
 
-from a2j.commands import get_commands
-from tests.util import execute
+from src.a2j import get_commands
+from tests.util import fetch
 
 
 class TestA2J(unittest.TestCase):
     # PARSE FROM WEB API
-    parsed, err = execute([
+    parsed, err = fetch([
         "curl",
-        "http://localhost:8080/a2j/v1/parse/" + "/".join(get_commands().keys()) + "/?record=test.mgz"
+        "http://localhost:8080/a2j/v1/parse" / ("/".join(get_commands().keys())) / "?record=test.mgz"
     ])
 
     if err is not None:
         print("Error while parsing from web API: ", err)
 
     # READ FROM FILE
-    with open("tests/data/test.json", "r") as file:
+    with open(os.path.dirname(os.path.realpath(__file__)) / "data/test.json", "r") as file:
         read = json.loads(file.read())
         file.close()
+
+    def test_parsed(self):
+        assert self.parsed is not None
+
+    def test_read(self):
+        assert self.read is not None
 
     def test_completed(self):
         assert self.parsed["completed"] == self.read["completed"]

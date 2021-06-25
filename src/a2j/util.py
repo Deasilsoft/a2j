@@ -1,6 +1,7 @@
 """
-aoe2record-to-json utility functions.
+a2j utility functions.
 """
+from pathlib import Path
 
 
 def is_record(path: str) -> bool:
@@ -22,4 +23,4 @@ def record(path: str) -> str:
     :return: User-supplied record file.
     :rtype: str
     """
-    return "records/" + path
+    return Path(__file__).parent.parent.absolute() / "records" / path

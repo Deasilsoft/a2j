@@ -1,5 +1,5 @@
 """
-aoe2record-to-json JSONEncoder class.
+a2j JSONEncoder class.
 """
 import _hashlib
 import json

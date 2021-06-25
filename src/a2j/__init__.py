@@ -1,11 +1,31 @@
 """
-aoe2record-to-json parsing functions.
+https://github.com/Deasilsoft/a2j
+
+Copyright (c) 2020-2021 Deasilsoft
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 """
 import mgz.summary
 
-import a2j.cache
-import a2j.util
-from a2j.commands import get_commands
+from . import cache
+from . import util
+from .commands import get_commands
 
 
 def parse(record: str, commands: list) -> dict:
@@ -25,17 +45,17 @@ def parse(record: str, commands: list) -> dict:
     commands.sort()
 
     # CHECK IF USER-INPUT IS VALID; THEN OPEN THE RECORD FILE
-    if a2j.util.is_record(record):
+    if util.is_record(record):
 
         # FIRST GET CACHE IF AVAILABLE
-        cache, cached = a2j.cache.get(record, commands)
+        cached_data, is_cached = cache.read(record, commands)
 
-        if cached:
-            data = cache
+        if is_cached:
+            data = cached_data
 
         else:
             try:
-                with open(a2j.util.record(record), "rb") as file:
+                with open(util.record(record), "rb") as file:
                     perform = False
 
                     # CHECK IF ANY COMMAND IS VALID; TO PREVENT PARSING THE RECORD WITH NO OUTPUT
@@ -79,7 +99,7 @@ def parse(record: str, commands: list) -> dict:
                 })
 
             # PUT TO CACHE
-            a2j.cache.put(record, commands, data)
+            cache.create(record, commands, data)
 
     else:
         data["errors"].append({

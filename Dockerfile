@@ -8,11 +8,11 @@ ENV HOME=/home/a2j
 
 # SETUP WORK DIRECTORY
 WORKDIR ${HOME}
-COPY . .
+ADD . .
 
 # INSTALL PYTHON REQUIREMENTS
 RUN ["pip", "install", "-r", "requirements.txt"]
 
 # RUN APP ON PORT 8080
 EXPOSE 8080
-CMD ["python", "main.py"]
+CMD ["python", "src/main.py"]

@@ -1,11 +1,13 @@
-# aoe2record-to-json
+# deasilsoft/a2j
 
-An Age of Empires II record analyzing API used to convert AoE2 records to JSON.
+A JSON API analyzing Age of Empires II records.
 
 ![LGTM Grade](https://img.shields.io/lgtm/grade/python/github/Deasilsoft/aoe2record-to-json?style=for-the-badge)
 ![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/Deasilsoft/aoe2record-to-json?style=for-the-badge)
 
 ## Setup
+
+### Using Docker
 
 1. Pull the image from Docker Hub.
 
@@ -15,11 +17,25 @@ An Age of Empires II record analyzing API used to convert AoE2 records to JSON.
 
        docker run -p 8080:8080 deasilsoft/a2j
 
+### Using pip
+
+TODO: Add instructions how to install using pip.
+
+### Direct Download
+
+1. Download the repository from Github.
+
+2. Navigate to the project root directory.
+
+3. Run with docker-compose.
+
+        docker-compose up --build -d
+
 ## Usage
 
 This is an API ran as a Docker container. Mount to the `records` directory to add and remove records from the API.
 
-### Endpoints
+### Endpoints (TODO: change to RESTFUL)
 
     localhost:8080/a2j/
     localhost:8080/a2j/v1/
