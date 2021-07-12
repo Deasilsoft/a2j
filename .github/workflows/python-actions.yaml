@@ -1,4 +1,4 @@
-name: aoe2record-to-json
+name: a2j
 on: [ push ]
 jobs:
   main:
@@ -7,10 +7,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
       - name: Build & Run Container
-        run: docker-compose up --build -d
+        run: docker compose up --build -d
       - name: Install Test Environment
         run: |
-          docker exec aoe2record-to-json_a2j_1 apk --no-cache add curl
-          docker exec aoe2record-to-json_a2j_1 pip install pytest
+          docker exec a2j_a2j_1 apk --no-cache add curl
+          docker exec a2j_a2j_1 pip install pytest
       - name: Run Tests
-        run: docker exec aoe2record-to-json_a2j_1 python -m pytest
+        run: docker exec a2j_a2j_1 python -m pytest
