@@ -18,7 +18,7 @@ def test_record_does_not_exist():
 
     assert len(data["errors"][0]) == 2
     assert data["errors"][0]["errno"] == 0
-    assert data["errors"][0]["message"] == "Record does not exist: records/does-not-exist"
+    assert data["errors"][0]["message"] == "Record does not exist: /home/a2j/src/records/does-not-exist"
 
 
 def test_command_does_not_exist():

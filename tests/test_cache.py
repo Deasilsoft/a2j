@@ -15,7 +15,7 @@ def test_clean():
         print("Error while parsing from web API: ", err)
 
     assert data["success"] is True
-    assert data["cleaned"] == 1
+    assert data["cleaned"] == 2
 
 
 def test_clean_empty():

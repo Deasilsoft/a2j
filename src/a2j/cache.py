@@ -17,16 +17,13 @@ def create(record: str, commands: list, data: dict):
     :param (dict) data: JSON object.
     """
     cache_file = get_path(record, commands)
-    path = ""
 
     # CREATE MISSING DIRECTORIES
-    for directory in cache_file.split(os.sep)[:-1]:
-        path += os.sep + directory
-        if not os.path.exists(path):
-            os.mkdir(path)
+    cache_file.mkdir(parents=True, exist_ok=True)
+    cache_file.rmdir()
 
     # DUMP JSON OBJECT INTO FILE
-    with open(cache_file, "w") as file:
+    with cache_file.open(mode="w") as file:
         json.dump(data, file, cls=encoder.JSONEncoder)
         file.close()
 
@@ -44,12 +41,12 @@ def read(record: str, commands: list) -> (dict, bool):
     is_cached = False
     cache_file = get_path(record, commands)
 
-    if os.path.exists(cache_file):
+    if cache_file.exists():
         # IS CACHED
         is_cached = True
 
         # LOAD JSON OBJECT FROM FILE
-        with open(cache_file, "r") as file:
+        with cache_file.open() as file:
             cached_data = json.load(file)
             file.close()
 
@@ -73,7 +70,7 @@ def delete(record: str) -> int:
     return counter
 
 
-def get_path(record: str, commands: list) -> str:
+def get_path(record: str, commands: list) -> Path:
     """
     Get path to cache file with data.
 
@@ -83,7 +80,5 @@ def get_path(record: str, commands: list) -> str:
     :rtype: str
     """
     commands.sort()
-
-    print(Path(__file__).parent.parent.absolute() / "cache" / (os.sep.join(commands)) / record)
 
     return Path(__file__).parent.parent.absolute() / "cache" / (os.sep.join(commands)) / record

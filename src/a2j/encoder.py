@@ -34,6 +34,9 @@ class JSONEncoder(json.JSONEncoder):
                 "value": obj.value,
             }
 
+        if isinstance(obj, set) or isinstance(obj, frozenset):
+            return list(obj)
+
         if isinstance(obj, bytes):
             return obj.decode("unicode_escape")
 

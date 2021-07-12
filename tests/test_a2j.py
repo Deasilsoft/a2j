@@ -13,14 +13,14 @@ class TestA2J(unittest.TestCase):
     # PARSE FROM WEB API
     parsed, err = fetch([
         "curl",
-        "http://localhost:8080/a2j/v1/parse" / ("/".join(get_commands().keys())) / "?record=test.mgz"
+        "http://localhost:8080/a2j/v1/parse/" + ("/".join(get_commands().keys())) + "/?record=test.mgz"
     ])
 
     if err is not None:
         print("Error while parsing from web API: ", err)
 
     # READ FROM FILE
-    with open(os.path.dirname(os.path.realpath(__file__)) / "data/test.json", "r") as file:
+    with open(os.path.dirname(os.path.realpath(__file__)) + os.sep + "data" + os.sep + "test.json", "r") as file:
         read = json.loads(file.read())
         file.close()
 

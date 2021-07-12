@@ -15,7 +15,7 @@ def is_record(path: str) -> bool:
     return path.find("..") == -1
 
 
-def record(path: str) -> str:
+def record(path: str) -> Path:
     """
     Get record file path by filename.
 

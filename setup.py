@@ -3,7 +3,7 @@ import os
 
 from setuptools import setup, find_packages
 
-long_description = (os.path.dirname(os.path.realpath(__file__)) / "README.md").read_text(encoding="utf-8")
+long_description = (os.path.dirname(os.path.realpath(__file__)) + os.sep + "README.md").read_text(encoding="utf-8")
 
 with open("VERSION", "r") as file:
     version = file.read().strip()
