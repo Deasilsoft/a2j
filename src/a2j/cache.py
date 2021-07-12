@@ -63,7 +63,7 @@ def delete(record: str) -> int:
     """
     counter = 0
 
-    for file in Path(Path(__file__).parent.parent.absolute() / "cache").rglob(record):
+    for file in get_root().rglob(record):
         os.remove(file)
         counter += 1
 
@@ -81,4 +81,13 @@ def get_path(record: str, commands: list) -> Path:
     """
     commands.sort()
 
-    return Path(__file__).parent.parent.absolute() / "cache" / (os.sep.join(commands)) / record
+    return get_root() / (os.sep.join(commands)) / record
+
+
+def get_root() -> Path:
+    """
+    Get cache root path.
+
+    :return: Cache root path.
+    """
+    return Path(__file__).parent.parent.parent.resolve() / "cache"

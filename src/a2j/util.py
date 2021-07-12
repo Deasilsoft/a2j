@@ -23,4 +23,4 @@ def record(path: str) -> Path:
     :return: User-supplied record file.
     :rtype: str
     """
-    return Path(__file__).parent.parent.absolute() / "records" / path
+    return Path(__file__).parent.parent.parent.resolve() / "records" / path

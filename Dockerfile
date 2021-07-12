@@ -8,7 +8,7 @@ ENV HOME=/home/a2j
 
 # SETUP WORK DIRECTORY
 WORKDIR ${HOME}
-ADD . .
+COPY . .
 
 # INSTALL PYTHON REQUIREMENTS
 RUN ["pip", "install", "-r", "requirements.txt"]

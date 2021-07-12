@@ -55,7 +55,7 @@ def parse(record: str, commands: list) -> dict:
 
         else:
             try:
-                with open(util.record(record), "rb") as file:
+                with util.record(record).open(mode="rb") as file:
                     perform = False
 
                     # CHECK IF ANY COMMAND IS VALID; TO PREVENT PARSING THE RECORD WITH NO OUTPUT

@@ -18,7 +18,7 @@ import a2j.util
 app = Flask(__name__)
 startTime = time.time()
 
-with open(Path(__file__).parent.parent.absolute() / "VERSION", "r") as file:
+with open(Path(__file__).parent.parent.resolve() / "VERSION", "r") as file:
     version = file.read().strip()
 
 

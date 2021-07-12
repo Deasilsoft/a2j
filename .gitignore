@@ -1,6 +1,6 @@
 # RECORDS
-src/records/*
-!src/records/test.mgz
+records/*
+!records/test.mgz
 
 # IDE
 .idea
