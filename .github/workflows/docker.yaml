@@ -2,6 +2,7 @@ name: a2j to Docker Hub
 on: [ push ]
 jobs:
   main:
+    environment: DOCKER
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Repository
