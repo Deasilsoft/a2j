@@ -1,2 +1,4 @@
 mgz
 flask
+pillow
+setuptools

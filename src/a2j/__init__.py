@@ -25,7 +25,6 @@ import mgz.summary
 
 from . import cache
 from . import util
-from .commands import get_commands
 
 
 def parse(record: str, commands: list) -> dict:
@@ -44,9 +43,22 @@ def parse(record: str, commands: list) -> dict:
     # SORT COMMANDS TO HAVE A REPEATABLE STRUCTURE OF THE JSON OBJECT
     commands.sort()
 
-    # CHECK IF USER-INPUT IS VALID; THEN OPEN THE RECORD FILE
-    if util.is_record(record):
+    # CHECK IF USER-SUPPLIED RECORD IS VALID
+    if not util.is_record(record):
+        data["errors"].append({
+            "message": "Record does not exist: " + str(util.get_record(record)),
+            "errno": 0,
+        })
 
+    # CHECK IF USER-SUPPLIED COMMANDS ARE VALID
+    elif not util.validate_commands(commands):
+        data["errors"].append({
+            "message": "Invalid commands: " + str(util.invalid_commands(commands)),
+            "errno": 1
+        })
+
+    # OPEN THE RECORD FILE
+    else:
         # FIRST GET CACHE IF AVAILABLE
         cached_data, is_cached = cache.read(record, commands)
 
@@ -54,57 +66,29 @@ def parse(record: str, commands: list) -> dict:
             data = cached_data
 
         else:
-            try:
-                with util.record(record).open(mode="rb") as file:
-                    perform = False
+            with util.get_record(record).open(mode="rb") as file:
+                summary = None
 
-                    # CHECK IF ANY COMMAND IS VALID; TO PREVENT PARSING THE RECORD WITH NO OUTPUT
+                try:
+                    # SET THE LOGGER TO AN IMPOSSIBLY HIGH LEVEL TO PREVENT WEIRD OUTPUT
+                    mgz.summary.LOGGER.setLevel(9001)
+                    summary = mgz.summary.Summary(file)
+
+                except Exception as err:
+                    data["errors"].append({
+                        "message": "Parsing AoE2 record stopped with this error: " + str(err),
+                        "errno": 2
+                    })
+
+                # PUT THE RECORD DATA INSIDE OUR ARRAY
+                if summary is not None:
                     for command in commands:
-                        if command in get_commands():
-                            perform = True
+                        if command in util.get_commands():
+                            data[command] = util.get_commands().get(command)(summary)
 
-                        else:
-                            data["errors"].append({
-                                "message": "Command does not exist: " + command,
-                                "errno": 1
-                            })
-
-                    # GO AHEAD AND PERFORM THE RECORD PARSING
-                    if perform:
-                        summary = None
-
-                        try:
-                            # SET THE LOGGER TO AN IMPOSSIBLY HIGH LEVEL TO PREVENT WEIRD OUTPUT
-                            mgz.summary.LOGGER.setLevel(9001)
-                            summary = mgz.summary.Summary(file)
-
-                        except Exception as e:
-                            data["errors"].append({
-                                "message": "Parsing AoE2 record stopped with this error: " + str(e),
-                                "errno": 2
-                            })
-
-                        # PUT THE RECORD DATA INSIDE OUR ARRAY
-                        if summary is not None:
-                            for command in commands:
-                                if command in get_commands():
-                                    data[command] = get_commands().get(command)(summary)
-
-                    file.close()
-
-            except FileNotFoundError as e:
-                data["errors"].append({
-                    "message": "Record does not exist: " + e.filename,
-                    "errno": 0
-                })
+                file.close()
 
             # PUT TO CACHE
             cache.create(record, commands, data)
-
-    else:
-        data["errors"].append({
-            "message": "Injection attempt detected: " + record,
-            "errno": 100
-        })
 
     return data

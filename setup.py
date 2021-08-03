@@ -1,9 +1,9 @@
 """Setup.py for a2j."""
-import os
+from pathlib import Path
 
 from setuptools import setup, find_packages
 
-long_description = (os.path.dirname(os.path.realpath(__file__)) + os.sep + "README.md").read_text(encoding="utf-8")
+long_description = Path("README.md").read_text(encoding="utf-8")
 
 with open("VERSION", "r") as file:
     version = file.read().strip()
@@ -18,7 +18,7 @@ setup(
     author="Deasilsoft",
     author_email="business@deasilsoft.com",
     classifiers=[
-        "Development Status :: 3 - Alpha",  # 3 = Alpha, 4 = Beta, 5 = Production/Stable
+        "Development Status :: 4 - Beta",  # 3 = Alpha, 4 = Beta, 5 = Production/Stable
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
     ],
