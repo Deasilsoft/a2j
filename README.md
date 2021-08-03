@@ -1,6 +1,6 @@
 # deasilsoft/a2j
 
-A JSON API analyzing Age of Empires II records.
+A RESTFUL JSON API for analyzing Age of Empires II records.
 
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/Deasilsoft/a2j.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Deasilsoft/a2j/context:python)
 [![CodeFactor](https://www.codefactor.io/repository/github/deasilsoft/a2j/badge)](https://www.codefactor.io/repository/github/deasilsoft/a2j)
@@ -40,25 +40,22 @@ This is an API ran as a Docker container. Mount to the `records` directory to ad
     localhost:8080/minimap/<record>/
     localhost:8080/record/<record>/<commands...>/
 
-There is a list of endpoints available from `localhost:8080/a2j/v1/parse/` which are available in the `endpoints`
-array. These endpoints can be added recursively to retrieve the data you desire.
-
-By adding the `record` argument you select the Age of Empires II record to parse or to clean.
+A list of `endpoints` is available from `localhost:8080/record/<record>/<commands...>/`. These `endpoints` can be added recursively to the path in order to retrieve the data you
+desire.
 
 ## Examples
 
-### Parse
+### GET
 
-This example will retrieve all the `teams` and `players` from the `test.mgz` record.
+This example will retrieve a JSON object of all the `teams` and `players` from the `test.mgz` record.
 
     curl localhost:8080/record/test.mgz/teams/players/
 
-The output is a JSON object.
+### DELETE
 
-### Clean
+To delete all cached data from a `record` you can do the following.
 
-To clean all cached data from a record you can do the following.
+    curl -X DELETE localhost:8080/record/test.mgz/
 
-    curl localhost:8080/record/test.mgz/clean/
-
-This is useful in cases where you replace a record and want to generate a new cache hierarchy for the new data.
+This is useful in cases where you replace a `record` and want to generate a new cache, or for a general cleanup. Generally, you don't want to remove cached data unless the `record`
+has changed.

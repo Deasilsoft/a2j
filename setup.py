@@ -11,7 +11,7 @@ with open("VERSION", "r") as file:
 setup(
     name="a2j",
     version=version,
-    description="A JSON API analyzing Age of Empires II records.",
+    description="A RESTFUL JSON API for analyzing Age of Empires II records.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Deasilsoft/a2j",
