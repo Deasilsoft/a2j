@@ -1,5 +1,8 @@
 FROM python:alpine
 
+# SET WORK DIRECTORY
+WORKDIR ${HOME}
+
 # INSTALL PREREQUISITES TO PYTHON DEPENDENCIES
 RUN ["apk", "--no-cache", "add", "build-base"]
 RUN ["apk", "--no-cache", "add", "tiff-dev"]
@@ -16,12 +19,6 @@ RUN ["apk", "--no-cache", "add", "fribidi-dev"]
 RUN ["apk", "--no-cache", "add", "libimagequant-dev"]
 RUN ["apk", "--no-cache", "add", "libxcb-dev"]
 RUN ["apk", "--no-cache", "add", "libpng-dev"]
-
-# GET ENVIRONMENT VARIABLE
-ARG HOME
-
-# SET WORK DIRECTORY
-WORKDIR ${HOME}
 
 # COPY REQUIREMENTS.TXT
 COPY ./requirements.txt ./requirements.txt
