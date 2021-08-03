@@ -1,16 +1,19 @@
-name: a2j
+name: a2j Tests
 on: [ push ]
 jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Check Out Repository
         uses: actions/checkout@v2
+
       - name: Build & Run Container
         run: docker-compose up --build -d
+
       - name: Install Test Environment
         run: |
           docker exec a2j_a2j_1 apk --no-cache add curl
           docker exec a2j_a2j_1 pip install pytest
+
       - name: Run Tests
         run: docker exec a2j_a2j_1 python -m pytest
