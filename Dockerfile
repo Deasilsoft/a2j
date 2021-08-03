@@ -17,6 +17,9 @@ RUN ["apk", "--no-cache", "add", "libimagequant-dev"]
 RUN ["apk", "--no-cache", "add", "libxcb-dev"]
 RUN ["apk", "--no-cache", "add", "libpng-dev"]
 
+# GET ENVIRONMENT VARIABLE
+ARG HOME
+
 # SET WORK DIRECTORY
 WORKDIR ${HOME}
 
