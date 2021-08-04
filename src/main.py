@@ -9,7 +9,7 @@ from flask import Response, Flask
 
 import a2j
 import a2j.cache
-import a2j.JSONEncoder
+import a2j.encoder
 import a2j.util
 
 app = Flask(__name__)
@@ -57,7 +57,7 @@ def get_record(record: str, commands: str) -> Response:
     # FILL ENDPOINTS WITH MISSING COMMANDS
     data["endpoints"] = [command for command in a2j.util.get_commands() if command not in commands]
 
-    return Response(json.dumps(data, cls=a2j.JSONEncoder.JSONEncoder), mimetype="application/json")
+    return Response(json.dumps(data, cls=a2j.encoder.JSONEncoder), mimetype="application/json")
 
 
 @app.route("/record/<string:record>/", methods=["DELETE"])

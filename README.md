@@ -4,7 +4,7 @@ A RESTFUL JSON API for analyzing Age of Empires II records.
 
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/Deasilsoft/a2j.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Deasilsoft/a2j/context:python)
 [![CodeFactor](https://www.codefactor.io/repository/github/deasilsoft/a2j/badge)](https://www.codefactor.io/repository/github/deasilsoft/a2j)
-![Code Inspector Grade](https://www.code-inspector.com/project/25065/status/svg)
+[![Code Inspector Grade](https://www.code-inspector.com/project/25065/score/svg)](https://frontend.code-inspector.com/project/25065/dashboard)
 
 ## Setup
 
