@@ -2,14 +2,18 @@
 Testing aoe2record-to-json core functionality.
 """
 import json
-import os
 import unittest
+from pathlib import Path
 
 from src.a2j.util import get_commands
 from tests.util import fetch
 
 
 class TestA2J(unittest.TestCase):
+    """
+    Test the main functionality of a2j.
+    """
+
     # PARSE FROM WEB API
     parsed, err = fetch([
         "curl",
@@ -20,7 +24,7 @@ class TestA2J(unittest.TestCase):
         print("Error while parsing from web API: ", err)
 
     # READ FROM FILE
-    with open(os.path.dirname(os.path.realpath(__file__)) + os.sep + "data" + os.sep + "test.json", "r") as file:
+    with open(Path(__file__).parent.resolve() / "data" / "test.json", "r") as file:
         read = json.loads(file.read())
         file.close()
 

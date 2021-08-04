@@ -34,7 +34,7 @@ class JSONEncoder(json.JSONEncoder):
                 "value": obj.value,
             }
 
-        if isinstance(obj, set) or isinstance(obj, frozenset):
+        if isinstance(obj, (set, frozenset)):
             return list(obj)
 
         if isinstance(obj, bytes):

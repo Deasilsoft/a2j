@@ -5,4 +5,5 @@ services:
     env_file:
       - .env
     ports:
-      - "${PORT}:8080"
+      - "${A2J_HOST_PORT}:8080"
+    restart: always

@@ -1,5 +1,6 @@
-name: a2j Tests
-on: [ push ]
+name: Run a2j Tests
+on:
+  push:
 jobs:
   main:
     runs-on: ubuntu-latest
@@ -7,16 +8,13 @@ jobs:
       - name: Check Out Repository
         uses: actions/checkout@v2
 
-      - name: Fix Environment File
+      - name: Create Environment File (.env)
         run: cp .env.example .env
 
-      - name: Build & Run Container
+      - name: Build & Run Docker Container
         run: docker-compose up --build -d
 
-      - name: Install Test Environment
+      - name: Install & Run Pytest Inside Container
         run: |
-          docker exec a2j_a2j_1 apk --no-cache add curl
           docker exec a2j_a2j_1 pip install pytest
-
-      - name: Run Tests
-        run: docker exec a2j_a2j_1 python -m pytest
+          docker exec a2j_a2j_1 python -m pytest

@@ -2,7 +2,6 @@
 a2j CRUD-cache functions.
 """
 import json
-import os
 from pathlib import Path
 
 from . import encoder
@@ -19,8 +18,7 @@ def create(record: str, commands: list, data: dict):
     cache_file = get_path(record, commands)
 
     # CREATE MISSING DIRECTORIES
-    cache_file.mkdir(parents=True, exist_ok=True)
-    cache_file.rmdir()
+    cache_file.parent.mkdir(parents=True, exist_ok=True)
 
     # DUMP JSON OBJECT INTO FILE
     with cache_file.open(mode="w") as file:
@@ -64,7 +62,7 @@ def delete(record: str) -> int:
     counter = 0
 
     for file in get_root().rglob(record):
-        os.remove(file)
+        file.unlink()
         counter += 1
 
     return counter
@@ -81,7 +79,7 @@ def get_path(record: str, commands: list) -> Path:
     """
     commands.sort()
 
-    return get_root() / (os.sep.join(commands)) / record
+    return get_root().joinpath(*commands) / record
 
 
 def get_root() -> Path:

@@ -1,6 +1,7 @@
 """
 a2j utility functions.
 """
+import re
 from pathlib import Path
 
 from mgz.summary import Summary
@@ -13,7 +14,7 @@ def validate_commands(commands: list) -> bool:
     :param (list) commands: User-supplied commands.
     :return: bool
     """
-    return len(invalid_commands(commands)) == 0
+    return not invalid_commands(commands)
 
 
 def invalid_commands(commands: list) -> list[str]:
@@ -23,7 +24,7 @@ def invalid_commands(commands: list) -> list[str]:
     :param commands:
     :return:
     """
-    return list(filter(lambda command: command not in get_commands().keys(), commands))
+    return [command for command in commands if command not in get_commands().keys()]
 
 
 def get_commands() -> dict:
@@ -72,7 +73,7 @@ def is_record(path: str) -> bool:
     :return: True if filename is valid record file; otherwise False.
     :rtype: bool
     """
-    return path.find("..") == -1 and get_record(path).exists()
+    return re.search(r"(\.{2,}|\\|/)", path) is None and get_record(path).exists()
 
 
 def get_record(path: str) -> Path:

@@ -16,7 +16,7 @@ def test_clean():
     if err is not None:
         print("Error while parsing from web API: ", err)
 
-    assert data["deleted"] is 1
+    assert data["deleted"] == 1
 
 
 def test_clean_empty():
@@ -30,4 +30,4 @@ def test_clean_empty():
     if err is not None:
         print("Error while parsing from web API: ", err)
 
-    assert data["deleted"] is 0
+    assert data["deleted"] == 0

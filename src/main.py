@@ -54,15 +54,8 @@ def get_record(record: str, commands: str) -> Response:
     # PARSE DATA
     data = a2j.parse(record, commands)
 
-    # IF ENDPOINTS IS EMPTY (NOT CACHED)
-    if "endpoints" not in data:
-        # CREATE ENDPOINTS
-        data["endpoints"] = []
-
-        # FILL ENDPOINTS WITH MISSING COMMANDS
-        for command in a2j.util.get_commands().keys():
-            if command not in commands:
-                data["endpoints"].append(command)
+    # FILL ENDPOINTS WITH MISSING COMMANDS
+    data["endpoints"] = [command for command in a2j.util.get_commands().keys() if command not in commands]
 
     return Response(json.dumps(data, cls=a2j.encoder.JSONEncoder), mimetype="application/json")
 

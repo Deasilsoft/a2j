@@ -1,5 +1,6 @@
-name: a2j to Docker Hub
-on: [ push ]
+name: Build and Push a2j to Docker Hub
+on:
+  push:
 jobs:
   main:
     environment: DOCKER

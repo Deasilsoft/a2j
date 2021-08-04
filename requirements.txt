@@ -1,4 +1,5 @@
-mgz
-flask
-pillow
 setuptools
+python-dotenv
+flask
+mgz
+pillow
