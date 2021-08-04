@@ -11,7 +11,7 @@ import mgz.summary
 class JSONEncoder(json.JSONEncoder):
     """A JSONEncoder for parsing Age of Empires II records."""
 
-    def default(self, obj: any) -> any:
+    def default(self, obj):
         """
         :param obj:
         :rtype:

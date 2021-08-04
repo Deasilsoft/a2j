@@ -17,7 +17,7 @@ def validate_commands(commands: list) -> bool:
     return not invalid_commands(commands)
 
 
-def invalid_commands(commands: list) -> list[str]:
+def invalid_commands(commands: list[str]) -> list[str]:
     """
     Get list of invalid commands from list of commands.
 

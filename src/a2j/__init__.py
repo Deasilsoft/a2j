@@ -74,7 +74,7 @@ def parse(record: str, commands: list) -> dict:
                     mgz.summary.LOGGER.setLevel(9001)
                     summary = mgz.summary.Summary(file)
 
-                except Exception as err:
+                except RuntimeError as err:
                     data["errors"].append({
                         "message": "Parsing AoE2 record stopped with this error: " + str(err),
                         "errno": 2

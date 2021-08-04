@@ -55,7 +55,7 @@ def get_record(record: str, commands: str) -> Response:
     data = a2j.parse(record, commands)
 
     # FILL ENDPOINTS WITH MISSING COMMANDS
-    data["endpoints"] = [command for command in a2j.util.get_commands().keys() if command not in commands]
+    data["endpoints"] = [command for command in a2j.util.get_commands() if command not in commands]
 
     return Response(json.dumps(data, cls=a2j.encoder.JSONEncoder), mimetype="application/json")
 
@@ -71,19 +71,17 @@ def delete_record(record: str) -> Response:
 
     # IF RECORD EXISTS
     if a2j.util.is_record(record):
-
         return Response(json.dumps({
             "deleted": a2j.cache.delete(record)
         }), mimetype="application/json")
 
     # OTHERWISE: OUTPUT ERROR
-    else:
-        return Response(json.dumps({
-            "errors": [{
-                "message": "Record doesn't exist.",
-                "errno": 0,
-            }]
-        }), mimetype="application/json")
+    return Response(json.dumps({
+        "errors": [{
+            "message": "Record doesn't exist.",
+            "errno": 0,
+        }]
+    }), mimetype="application/json")
 
 
 # START THE APPLICATION ON PORT 8080
