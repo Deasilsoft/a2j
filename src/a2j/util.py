@@ -3,6 +3,7 @@ a2j utility functions.
 """
 import re
 from pathlib import Path
+from typing import List
 
 from mgz.summary import Summary
 
@@ -17,7 +18,7 @@ def validate_commands(commands: list) -> bool:
     return not invalid_commands(commands)
 
 
-def invalid_commands(commands: list[str]) -> list[str]:
+def invalid_commands(commands: List[str]) -> List[str]:
     """
     Get list of invalid commands from list of commands.
 

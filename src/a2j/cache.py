@@ -4,7 +4,7 @@ a2j CRUD-cache functions.
 import json
 from pathlib import Path
 
-from . import encoder
+from . import JSONEncoder
 
 
 def create(record: str, commands: list, data: dict):
@@ -22,7 +22,7 @@ def create(record: str, commands: list, data: dict):
 
     # DUMP JSON OBJECT INTO FILE
     with cache_file.open(mode="w") as file:
-        json.dump(data, file, cls=encoder.JSONEncoder)
+        json.dump(data, file, cls=JSONEncoder.JSONEncoder)
         file.close()
 
 
