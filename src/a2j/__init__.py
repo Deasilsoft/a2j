@@ -50,6 +50,13 @@ def parse(record: str, commands: list) -> dict:
             "errno": 0,
         })
 
+    # CHECK IF USER-SUPPLIED COMMANDS ARE EMPTY
+    elif not commands:
+        data["errors"].append({
+            "message": "No commands received.",
+            "errno": 3
+        })
+
     # CHECK IF USER-SUPPLIED COMMANDS ARE VALID
     elif not util.validate_commands(commands):
         data["errors"].append({
