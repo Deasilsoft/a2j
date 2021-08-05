@@ -24,7 +24,7 @@ class TestA2J(unittest.TestCase):
         print("Error while parsing from web API: ", err)
 
     # READ FROM FILE
-    with open(Path(__file__).parent.resolve() / "data" / "test.json", "r") as file:
+    with open(Path.cwd() / "tests" / "data" / "test.json", "r") as file:
         read = json.loads(file.read())
         file.close()
 

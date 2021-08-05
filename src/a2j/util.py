@@ -85,7 +85,7 @@ def get_record(path: str) -> Path:
     :return: User-supplied record file.
     :rtype: str
     """
-    return Path(__file__).parent.parent.parent.resolve() / "records" / path
+    return Path.cwd() / "records" / path
 
 
 def __get_restored(summary: Summary) -> dict:

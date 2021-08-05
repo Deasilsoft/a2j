@@ -88,4 +88,4 @@ def get_root() -> Path:
 
     :return: Cache root path.
     """
-    return Path(__file__).parent.parent.parent.resolve() / "cache"
+    return Path.cwd() / "cache"

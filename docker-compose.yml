@@ -1,9 +1,23 @@
 version: "3.9"
 services:
   a2j:
+    # Build from source
+    #
+    # Alternatively:
+    # build: deasilsoft/a2j
     build: .
+
+    # Load environment variables
     env_file:
       - .env
+
+    # Remove ports in production
     ports:
       - "${A2J_HOST_PORT}:8080"
+
+    # Bind to local directory
+    volumes:
+      - "./records:${A2J_HOME}/records"
+
+    # Always restart container on Docker start
     restart: always

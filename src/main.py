@@ -16,7 +16,7 @@ app = Flask(__name__)
 start_time = time.time()
 
 # READ VERSION
-with open(Path(__file__).parent.parent.resolve() / "VERSION", "r") as file:
+with open(Path.cwd() / "VERSION", "r") as file:
     version = file.read().strip()
 
 
@@ -36,20 +36,25 @@ def get_index() -> Response:
     }), mimetype="application/json")
 
 
-@app.route("/record/<string:record>/<path:commands>/", methods=["GET"])
-def get_record(record: str, commands: str) -> Response:
+@app.route("/record/<path:path>", methods=["GET"])
+def get_record(path: str) -> Response:
     """
-    Handle Endpoint: GET /record/<string:record>/<path:commands>/
+    Handle Endpoint: GET /record/<path:path>
 
-        <path:record> The path to the record.
-        <path:commands> All commands to extract from the record.
+        <path:path> The path with record and commands data.
 
     :return: HTTP Response.
     :rtype: Response
     """
 
+    # GET RECORD
+    record = path.split("/")[0]
+
     # SPLIT COMMANDS
-    commands = commands.split("/")
+    commands = path.split("/")[1:]
+
+    # FILTER EMPTY COMMANDS
+    commands = list(filter(lambda command: command != "", commands))
 
     # PARSE DATA
     data = a2j.parse(record, commands)
@@ -60,14 +65,17 @@ def get_record(record: str, commands: str) -> Response:
     return Response(json.dumps(data, cls=a2j.encoder.JSONEncoder), mimetype="application/json")
 
 
-@app.route("/record/<string:record>/", methods=["DELETE"])
-def delete_record(record: str) -> Response:
+@app.route("/record/<path:path>", methods=["DELETE"])
+def delete_record(path: str) -> Response:
     """
-    Handle Endpoint: DELETE /record/<string:record>/
+    Handle Endpoint: DELETE /record/<string:record>
 
     :return: HTTP Response.
     :rtype: Response
     """
+
+    # GET RECORD
+    record = path.split("/")[0]
 
     # IF RECORD EXISTS
     if a2j.util.is_record(record):

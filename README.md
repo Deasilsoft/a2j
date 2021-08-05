@@ -8,36 +8,82 @@ A RESTFUL JSON API for analyzing Age of Empires II records.
 
 ## Setup
 
-### Using Docker
+### Add To Your Docker Compose Project (Recommended)
 
-1. Pull the image from Docker Hub with `docker pull deasilsoft/a2j:latest`.
+1. Create an **.env** file with values from **.env.example** from this project (or append to existing file):
 
-2. Copy `.env.example` to `.env` with `cp .env.example .env` and replace values to your desired values within `.env`.
+   Replace `FLASK_ENV=development` with `FLASK_ENV=production` for production.
 
-3. Run the Docker container and publish the port with `docker run --env-file ./.env -p 8080:8080 deasilsoft/a2j`.
+2. Add this **service** to your **docker-compose.yml** file:
+
+       a2j:
+         # Build from image
+         build: deasilsoft/a2j
+
+         # Load environment variables
+         env_file:
+           - .env
+
+         # Remove ports in production
+         ports:
+           - "${A2J_HOST_PORT}:8080"
+
+         # Bind to local directory
+         volumes:
+           - "./records:${A2J_HOME}/records"
+
+         # Always restart container on Docker start
+         restart: always
+
+   Remove **ports** for production and access the API with `curl YOUR_PROJECT_a2j_1:8080` instead.
+
+### Direct Download & Docker Compose
+
+1. Download the repository from Github with and open project root:
+
+       git clone https://github.com/Deasilsoft/a2j.git
+       cd a2j
+
+3. Copy **.env.example** to **.env** with `cp .env.example .env` and make changes to **.env** as you desire.
+
+4. Make changes to **docker-compose.yml** as you desire.
+
+5. Run the Docker container with:
+
+       docker compose up --build -d
+
+### Using Only Docker
+
+1. Pull the image from Docker Hub with:
+
+       docker pull deasilsoft/a2j:latest
+
+3. Run the Docker container with:
+
+   #### For Development:
+
+       docker run -d --name a2j --env FLASK_ENV=development -p 8080:8080 -v ABSOLUTE_PATH_TO_RECORDS:/home/a2j/records deasilsoft/a2j:latest
+
+   #### For Production:
+
+       docker run -d --name a2j --env FLASK_ENV=production -v ABSOLUTE_PATH_TO_RECORDS:/home/a2j/records --restart always deasilsoft/a2j:latest
+
+*Remember to replace **ABSOLUTE_PATH_TO_RECORDS** with your value.*
+
+Read more about the [`docker run`](https://docs.docker.com/engine/reference/commandline/run/) syntax.
 
 ### Using pip
 
 Instructions are pending...
 
-### Direct Download
-
-1. Download the repository from Github with `git clone https://github.com/Deasilsoft/a2j.git`.
-
-2. Navigate to the project root directory with `cd a2j`.
-
-2. Copy `.env.example` to `.env` with `cp .env.example .env` and replace values to your desired values within `.env`.
-
-3. Run the Docker container with `docker compose up --build -d`.
-
 ## Usage
 
-This is an API ran as a Docker container. Mount to the `records` directory to add and remove records from the API.
+This is a RESTFUL API ran as a Docker container behind a secure firewall. Mount to the `records` directory to add and remove records from the API.
 
 ### Endpoints
 
     localhost:8080/
-    localhost:8080/minimap/<record>/
+    localhost:8080/minimap/<record>/ (W.I.P.)
     localhost:8080/record/<record>/<commands...>/
 
 A list of `endpoints` is available from `localhost:8080/record/<record>/<commands...>/`. These `endpoints` can be added recursively to the path in order to retrieve the data you
