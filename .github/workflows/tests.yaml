@@ -15,9 +15,9 @@ jobs:
       - name: Build & Run Docker Container
         run: docker-compose up --build -d
 
-      - name: Install & Run Pytest Inside Container
+      - name: Install & Run Pytest With Codecov
         run: |
-          pip install --no-cache-dir pytest pytest-cov
+          pip install --no-cache-dir mgz pytest pytest-cov
           pytest --cov=src tests
 
       - name: Report to Codecov
