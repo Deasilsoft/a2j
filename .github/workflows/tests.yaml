@@ -18,10 +18,10 @@ jobs:
       - name: Install & Run Pytest With Codecov
         run: |
           pip install --no-cache-dir mgz pytest pytest-cov
-          pytest --cov=src tests
+          pytest --cov=src --cov-report=xml tests
 
       - name: Report to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
