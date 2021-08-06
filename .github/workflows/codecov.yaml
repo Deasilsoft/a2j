@@ -6,8 +6,11 @@ jobs:
     environment: CODECOV
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - uses: codecov/codecov-action@v2
+      - name: Check Out Repository
+        uses: actions/checkout@v2
+
+      - name: Report to Codecov
+        uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
