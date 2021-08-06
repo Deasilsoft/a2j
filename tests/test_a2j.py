@@ -5,7 +5,7 @@ import json
 import unittest
 from pathlib import Path
 
-from src.a2j.util import get_commands
+from src.a2j import available_commands
 from tests.util import fetch
 
 
@@ -17,7 +17,7 @@ class TestA2J(unittest.TestCase):
     # PARSE FROM WEB API
     parsed, err = fetch([
         "curl",
-        "http://localhost:8080/record/test.mgz/" + ("/".join(get_commands().keys())) + "/"
+        "http://localhost:8080/record/test.mgz/" + ("/".join(available_commands())) + "/"
     ])
 
     if err is not None:

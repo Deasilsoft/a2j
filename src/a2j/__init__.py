@@ -25,6 +25,7 @@ import mgz.summary
 
 from . import cache
 from . import util
+from .commands import available_commands
 
 
 def parse(record: str, commands: list) -> dict:
@@ -89,9 +90,8 @@ def parse(record: str, commands: list) -> dict:
 
                 # PUT THE RECORD DATA INSIDE OUR ARRAY
                 if summary is not None:
-                    for command in commands:
-                        if command in util.get_commands():
-                            data[command] = util.get_commands().get(command)(summary)
+                    for command in util.valid_commands(commands):
+                        data[command] = available_commands().get(command)(summary)
 
                 file.close()
 

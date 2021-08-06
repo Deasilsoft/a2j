@@ -2,9 +2,17 @@
 
 A RESTFUL JSON API for analyzing Age of Empires II records.
 
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/Deasilsoft/a2j.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Deasilsoft/a2j/context:python)
-[![CodeFactor](https://www.codefactor.io/repository/github/deasilsoft/a2j/badge)](https://www.codefactor.io/repository/github/deasilsoft/a2j)
-[![Code Inspector Grade](https://www.code-inspector.com/project/25065/score/svg)](https://frontend.code-inspector.com/project/25065/dashboard)
+[![Code Tests](https://img.shields.io/github/workflow/status/deasilsoft/a2j/Run%20a2j%20Tests?label=pytest&logo=pytest&logoWidth=18)](https://github.com/Deasilsoft/a2j/actions/workflows/tests.yaml)
+[![Code Inspector Score](https://www.code-inspector.com/project/25065/score/svg)](https://frontend.code-inspector.com/project/25065/dashboard)
+[![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/deasilsoft/a2j/main?label=CodeFactor&logo=codefactor&logoWidth=18)](https://www.codefactor.io/repository/github/deasilsoft/a2j)
+[![LGTM Alerts](https://img.shields.io/lgtm/alerts/github/Deasilsoft/a2j?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Deasilsoft/a2j/context:python)  
+[![Docker Build](https://img.shields.io/github/workflow/status/deasilsoft/a2j/Build%20and%20Push%20a2j%20to%20Docker%20Hub?logo=docker&logoWidth=18)](https://github.com/Deasilsoft/a2j/actions/workflows/docker-hub.yaml)
+[![Docker Image Size](https://img.shields.io/docker/image-size/deasilsoft/a2j?logo=docker&logoWidth=18)](https://hub.docker.com/r/deasilsoft/a2j)
+[![Docker Pulls](https://img.shields.io/docker/pulls/deasilsoft/a2j?logo=docker&logoWidth=18)](https://hub.docker.com/r/deasilsoft/a2j)
+[![Docker Stars](https://img.shields.io/docker/stars/deasilsoft/a2j?logo=docker&logoWidth=18)](https://hub.docker.com/r/deasilsoft/a2j)  
+[![Github Issues](https://img.shields.io/github/issues-raw/deasilsoft/a2j?logo=github&logoWidth=18)](https://github.com/Deasilsoft/a2j/issues)
+[![Github Contributors](https://img.shields.io/github/contributors/deasilsoft/a2j?logo=github&logoWidth=18)](https://github.com/Deasilsoft/a2j/pulls)
+[![Github Commits](https://img.shields.io/github/last-commit/deasilsoft/a2j?logo=github&logoWidth=18)](https://github.com/Deasilsoft/a2j/commits/main)
 
 ## Setup
 

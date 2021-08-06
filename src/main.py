@@ -60,7 +60,7 @@ def get_record(path: str) -> Response:
     data = a2j.parse(record, commands)
 
     # FILL ENDPOINTS WITH MISSING COMMANDS
-    data["endpoints"] = [command for command in a2j.util.get_commands() if command not in commands]
+    data["endpoints"] = [command for command in a2j.available_commands() if command not in commands]
 
     return Response(json.dumps(data, cls=a2j.encoder.JSONEncoder), mimetype="application/json")
 
