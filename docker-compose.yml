@@ -1,23 +1,37 @@
 version: "3.9"
 services:
-  a2j:
+
+  development:
+
     # Build from source
-    #
-    # Alternatively:
-    # build: deasilsoft/a2j
     build: .
 
-    # Load environment variables
-    env_file:
-      - .env
+    # Set environment variables
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
 
-    # Remove ports in production
+    # Publish port
     ports:
-      - "${A2J_HOST_PORT}:8080"
+      - "5000:5000"
 
-    # Bind to local directory
+    # Bind records & src directories
     volumes:
-      - "./records:${A2J_HOME}/records"
+      - "./records:/home/a2j/records"
+      - "./src:/home/a2j/src"
+
+  production:
+
+    # Run from image
+    image: deasilsoft/a2j
+
+    # Set environment variables
+    environment:
+      - FLASK_ENV=production
+
+    # Bind records directory
+    volumes:
+      - "./records:/home/a2j/records"
 
     # Always restart container on Docker start
     restart: always

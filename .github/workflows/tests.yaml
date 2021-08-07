@@ -9,20 +9,11 @@ jobs:
       - name: Check Out Repository
         uses: actions/checkout@v2
 
-      - name: Create Environment File (.env)
-        run: cp .env.example .env
-
       - name: Build & Run Docker Container
         run: docker-compose up --build -d
 
-      - name: Install & Run Pytest With Codecov
-        run: |
-          pip install --no-cache-dir mgz pytest pytest-cov
-          pytest --cov=src --cov-report=xml tests
+      - name: Run Pytest & Coverage
+        run: docker exec a2j_development_1 pytest --cov=src --cov-report=xml tests
 
-      - name: Report to Codecov
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
-          verbose: true
+      - name: Send Coverage Report To Codecov
+        run: docker exec a2j_development_1 codecov -t ${{ secrets.CODECOV_TOKEN }}

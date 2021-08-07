@@ -7,10 +7,3 @@ records/*
 
 # PYTHON
 __pycache__
-
-# .ENV
-.env
-
-# COVERAGE
-.coverage
-coverage.*

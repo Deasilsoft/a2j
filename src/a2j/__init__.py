@@ -21,10 +21,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+
+from pathlib import Path
+
 import mgz.summary
 
-from . import cache
-from . import util
+from . import cache, util
 from .commands import available_commands
 
 
@@ -37,6 +39,7 @@ def parse(record: str, commands: list) -> dict:
     :return: JSON object
     :rtype: dict
     """
+
     data = {
         "errors": []
     }
@@ -74,7 +77,7 @@ def parse(record: str, commands: list) -> dict:
             data = cached_data
 
         else:
-            with util.get_record(record).open(mode="rb") as file:
+            with util.get_record(record).open(mode = "rb") as file:
                 summary = None
 
                 try:
@@ -99,3 +102,22 @@ def parse(record: str, commands: list) -> dict:
             cache.create(record, commands, data)
 
     return data
+
+
+def get_version() -> str:
+    """
+    Get the version of a2j.
+
+    :return:  Version of a2j.
+    :rtype: str
+    """
+
+    # OPEN VERSION FILE
+    with open(Path.cwd() / "VERSION", "r") as file:
+        # READ VERSION FROM FILE
+        version = file.read().strip()
+
+        # CLOSE FILE
+        file.close()
+
+    return version

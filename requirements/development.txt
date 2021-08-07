@@ -1,0 +1,5 @@
+-r production.txt
+pytest
+pytest-cov
+coverage
+codecov

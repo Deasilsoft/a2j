@@ -22,46 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import _hashlib
-import json
+import time
 
-import mgz
-import mgz.summary
+from flask import Flask
 
+from . import a2j
+from .routes import routes
 
-class JSONEncoder(json.JSONEncoder):
-    """
-    A JSONEncoder for parsing Age of Empires II records.
-    """
+# GET FLASK
+app = Flask(__name__)
 
-    def default(self, obj: any) -> any:
-        """
-        :param obj:
-        :rtype:
-        """
-
-        if isinstance(obj, _hashlib.HASH):
-            return {
-                "type": obj.name,
-                "hex": obj.hexdigest(),
-            }
-
-        if isinstance(obj, mgz.Version):
-            return {
-                "name": obj.name,
-                "value": obj.value,
-            }
-
-        if isinstance(obj, mgz.summary.chat.Chat):
-            return {
-                "name": obj.name,
-                "value": obj.value,
-            }
-
-        if isinstance(obj, (set, frozenset)):
-            return list(obj)
-
-        if isinstance(obj, bytes):
-            return obj.decode("unicode_escape")
-
-        return json.JSONEncoder.default(self, obj)
+# BIND ROUTES
+routes(app, time.time(), a2j.get_version())

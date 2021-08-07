@@ -19,32 +19,40 @@ RUN apk --no-cache add build-base \
                        libpng-dev
 
 # SET ENVIRONMENT VARIABLES
-ENV A2J_GROUP=a2j
-ENV A2J_USER=a2j
-ENV A2J_HOME=/home/a2j
+ENV GROUP=a2j
+ENV USER=a2j
+ENV HOME=/home/a2j
+ENV VENV=/home/a2j/venv
+ENV FLASK_APP=/home/a2j/src/app.py
 ENV FLASK_ENV=development
 
 # CREATE GROUP AND USER
-RUN addgroup -S ${A2J_GROUP} && adduser -S ${A2J_USER} -G ${A2J_GROUP} -h ${A2J_HOME}
+RUN addgroup -S ${GROUP} && adduser -S ${USER} -G ${GROUP} -h ${HOME}
 
 # SET USER AND WORK DIRECTORY
-USER ${A2J_USER}
-WORKDIR ${A2J_HOME}
+USER ${USER}
+WORKDIR ${HOME}
 
-# COPY REQUIREMENTS.TXT
-COPY ./requirements.txt ./requirements.txt
+# SETUP THE VIRTUAL ENVIRONMENT
+RUN python -m venv ${VENV}
+
+# UPDATE PATH TO INCLUDE AND PRIORITIZE THE VIRTUAL ENVIRONMENT
+ENV PATH="${VENV}/bin:${PATH}"
+
+# COPY REQUIREMENTS
+COPY requirements requirements
 
 # INSTALL PYTHON DEPENDENCIES
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements/${FLASK_ENV}.txt
 
-# COPY A2J
-COPY --chown=${A2J_USER}:${A2J_GROUP} . .
+# COPY ALL FILES (except directories & files listed in .dockerignore)
+COPY --chown=${USER}:${GROUP} . .
 
-# OPEN PORT 8080
-EXPOSE 8080
+# EXPOSE PORT 5000 TO LOCAL NETWORK
+EXPOSE 5000
 
 # RESTART CONTAINER IF HEALTHCHECK FAILS
-HEALTHCHECK CMD curl --fail http://localhost:8080 || exit 1
+HEALTHCHECK CMD curl --fail http://localhost:5000 || exit 1
 
-# RUN A2J
-CMD python src/main.py
+# RUN A2J APP
+CMD flask run --host=0.0.0.0

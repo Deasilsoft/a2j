@@ -1,38 +1,68 @@
 """
-Testing aoe2record-to-json core functionality.
+https://github.com/Deasilsoft/a2j
+
+Copyright (c) 2020-2021 Deasilsoft
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 """
+
 import json
+import time
 import unittest
 from pathlib import Path
 
-from src.a2j import available_commands
-from tests.util import fetch
+from flask import Flask
+
+from ..src import a2j
+from ..src.a2j.commands import available_commands
+from ..src.routes import routes
 
 
 class TestA2J(unittest.TestCase):
     """
-    Test the main functionality of a2j.
+    Test parsing of Age of Empires II record.
     """
 
-    # PARSE FROM WEB API
-    parsed, err = fetch([
-        "curl",
-        "http://localhost:8080/record/test.mgz/" + ("/".join(available_commands())) + "/"
-    ])
+    @classmethod
+    def setUpClass(cls):
+        """
+        Setup the testing environment.
+        """
 
-    if err is not None:
-        print("Error while parsing from web API: ", err)
+        # SETUP FLASK TEST ENVIRONMENT
+        app = Flask(__name__)
+        routes(app, time.time(), a2j.get_version())
+        client = app.test_client()
 
-    # READ FROM FILE
-    with open(Path.cwd() / "tests" / "data" / "test.json", "r") as file:
-        read = json.loads(file.read())
-        file.close()
+        # CLEAR CACHE BEFORE TESTING
+        client.delete("/record/test.mgz/")
 
-    def test_parsed(self):
-        assert self.parsed is not None
+        # GET DATA PARSED BY A2J
+        cls.parsed = client.get("/record/test.mgz/" + "/".join(available_commands()) + "/").get_json()
 
-    def test_read(self):
-        assert self.read is not None
+        # OPEN DATA FILE
+        with open(Path.cwd() / "tests" / "data" / "test.json", "r") as file:
+            # READ JSON FROM FILE
+            cls.read = json.loads(file.read())
+
+            # CLOSE FILE
+            file.close()
 
     def test_completed(self):
         assert self.parsed["completed"] == self.read["completed"]

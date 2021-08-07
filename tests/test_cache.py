@@ -1,33 +1,58 @@
 """
-Testing aoe2record-to-json caching.
+https://github.com/Deasilsoft/a2j
+
+Copyright (c) 2020-2021 Deasilsoft
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 """
 
-from tests.util import fetch
+import time
+import unittest
+
+from flask import Flask
+
+from ..src import a2j
+from ..src.routes import routes
 
 
-def test_clean():
-    data, err = fetch([
-        "curl",
-        "-X",
-        "DELETE",
-        "http://localhost:8080/record/test.mgz/"
-    ])
+class TestCache(unittest.TestCase):
+    """
+    Test data caching.
+    """
 
-    if err is not None:
-        print("Error while parsing from web API: ", err)
+    @classmethod
+    def setUpClass(cls):
+        """
+        Setup the testing environment.
+        """
 
-    assert data["deleted"] == 1
+        # SETUP FLASK TEST ENVIRONMENT
+        app = Flask(__name__)
+        routes(app, time.time(), a2j.get_version())
+        cls.client = app.test_client()
 
+    def test_clean(self):
+        data = self.client.delete("/record/test.mgz/").get_json()
 
-def test_clean_empty():
-    data, err = fetch([
-        "curl",
-        "-X",
-        "DELETE",
-        "http://localhost:8080/record/test.mgz/"
-    ])
+        assert data["deleted"] == 1
 
-    if err is not None:
-        print("Error while parsing from web API: ", err)
+    def test_clean_empty(self):
+        data = self.client.delete("/record/test.mgz/").get_json()
 
-    assert data["deleted"] == 0
+        assert data["deleted"] == 0
