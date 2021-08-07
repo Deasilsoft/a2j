@@ -22,7 +22,7 @@ A Restful JSON API for analyzing Age of Empires II records.
 
 1. Copy the `production` service found in `docker-compose.yml` to your project.
 
-### Direct Download & Docker Compose
+### Direct Download & Docker Compose (Development)
 
 1. Clone deasilsoft/a2j from Github and open the project root directory:
 
@@ -35,21 +35,15 @@ A Restful JSON API for analyzing Age of Empires II records.
 
        docker compose up --build -d
 
-### Using Only Docker
+### Using Only Docker (Production)
 
-1. Pull the image from Docker Hub with:
+1. Pull the image from Docker Hub.
 
        docker pull deasilsoft/a2j:latest
 
-2. Run the Docker container with:
+2. Run the Docker container.
 
-   #### For Development:
-
-       docker run -d --name a2j --env FLASK_ENV=development -p 5000:5000 -v ABSOLUTE_PATH_TO_RECORDS:/home/a2j/records deasilsoft/a2j:latest
-
-   #### For Production:
-
-       docker run -d --name a2j --env FLASK_ENV=production -v ABSOLUTE_PATH_TO_RECORDS:/home/a2j/records --restart always deasilsoft/a2j:latest
+       docker run -d --name a2j -v ABSOLUTE_PATH_TO_RECORDS:/home/a2j/records --restart always deasilsoft/a2j:latest
 
 *Remember to replace **ABSOLUTE_PATH_TO_RECORDS** with your own value.*
 

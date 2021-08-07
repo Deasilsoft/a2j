@@ -4,18 +4,16 @@ services:
   development:
 
     # Build from source
-    build: .
-
-    # Set environment variables
-    environment:
-      - FLASK_ENV=development
-      - FLASK_DEBUG=1
+    build:
+      context: .
+      args:
+        - ENV=development
 
     # Publish port
     ports:
       - "5000:5000"
 
-    # Bind records & src directories
+    # Bind records and src directories
     volumes:
       - "./records:/home/a2j/records"
       - "./src:/home/a2j/src"
@@ -24,10 +22,6 @@ services:
 
     # Run from image
     image: deasilsoft/a2j
-
-    # Set environment variables
-    environment:
-      - FLASK_ENV=production
 
     # Bind records directory
     volumes:

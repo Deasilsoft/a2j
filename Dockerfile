@@ -1,3 +1,4 @@
+# BUILD FROM PYTHON:ALPINE
 FROM python:alpine
 
 # INSTALL PREREQUISITES TO PYTHON DEPENDENCIES
@@ -18,35 +19,34 @@ RUN apk --no-cache add build-base \
                        libxcb-dev \
                        libpng-dev
 
-# SET ENVIRONMENT VARIABLES
+# CREATE AND SET GROUP, USER AND WORK DIRECTORY
 ENV GROUP=a2j
 ENV USER=a2j
 ENV HOME=/home/a2j
-ENV VENV=/home/a2j/venv
-ENV FLASK_APP=/home/a2j/src/app.py
-ENV FLASK_ENV=development
-
-# CREATE GROUP AND USER
 RUN addgroup -S ${GROUP} && adduser -S ${USER} -G ${GROUP} -h ${HOME}
-
-# SET USER AND WORK DIRECTORY
 USER ${USER}
 WORKDIR ${HOME}
 
-# SETUP THE VIRTUAL ENVIRONMENT
+# SETUP THE VIRTUAL ENVIRONMENT AND UPDATE PATH TO PRIORITIZE THE VIRTUAL ENVIRONMENT
+ENV VENV=/home/a2j/venv
 RUN python -m venv ${VENV}
-
-# UPDATE PATH TO INCLUDE AND PRIORITIZE THE VIRTUAL ENVIRONMENT
 ENV PATH="${VENV}/bin:${PATH}"
 
 # COPY REQUIREMENTS
 COPY requirements requirements
 
-# INSTALL PYTHON DEPENDENCIES
-RUN pip install --no-cache-dir -r requirements/${FLASK_ENV}.txt
+# GET ENVIRONMENT
+ARG ENV=production
 
-# COPY ALL FILES (except directories & files listed in .dockerignore)
+# INSTALL PYTHON DEPENDENCIES
+RUN pip install --no-cache-dir -r requirements/${ENV}.txt
+
+# COPY ALL AVAILABLE FILES
 COPY --chown=${USER}:${GROUP} . .
+
+# PREPARE FLASK
+ENV FLASK_APP=/home/a2j/src/app.py
+ENV FLASK_ENV=${ENV}
 
 # EXPOSE PORT 5000 TO LOCAL NETWORK
 EXPOSE 5000
