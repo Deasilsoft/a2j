@@ -42,7 +42,7 @@ def routes(app: Flask, start_time: float, version: str):
     :return:
     """
 
-    @app.route("/", methods = ["GET"])
+    @app.route("/", methods=["GET"])
     def get_index() -> Response:
         """
         Handle Endpoint: GET /
@@ -55,14 +55,13 @@ def routes(app: Flask, start_time: float, version: str):
             "version": version,
             "uptime": time.time() - start_time,
             "environment": os.getenv("FLASK_ENV"),
-            "debug": not not os.getenv("FLASK_DEBUG"),
             "endpoints": ["record"]
-        }), mimetype = "application/json")
+        }), mimetype="application/json")
 
-    @app.route("/record", methods = ["GET"])
-    @app.route("/record/", methods = ["GET"])
-    @app.route("/record/<path:path>", methods = ["GET"])
-    @app.route("/record/<path:path>/", methods = ["GET"])
+    @app.route("/record", methods=["GET"])
+    @app.route("/record/", methods=["GET"])
+    @app.route("/record/<path:path>", methods=["GET"])
+    @app.route("/record/<path:path>/", methods=["GET"])
     def get_record(path: str = "") -> Response:
         """
         Handle Endpoint: GET /record/<path:path>
@@ -88,12 +87,12 @@ def routes(app: Flask, start_time: float, version: str):
         # FILL ENDPOINTS WITH MISSING COMMANDS
         data["endpoints"] = [command for command in a2j.available_commands() if command not in commands]
 
-        return Response(json.dumps(data, cls = encoder.JSONEncoder), mimetype = "application/json")
+        return Response(json.dumps(data, cls=encoder.JSONEncoder), mimetype="application/json")
 
-    @app.route("/record", methods = ["DELETE"])
-    @app.route("/record/", methods = ["DELETE"])
-    @app.route("/record/<path:path>", methods = ["DELETE"])
-    @app.route("/record/<path:path>/", methods = ["DELETE"])
+    @app.route("/record", methods=["DELETE"])
+    @app.route("/record/", methods=["DELETE"])
+    @app.route("/record/<path:path>", methods=["DELETE"])
+    @app.route("/record/<path:path>/", methods=["DELETE"])
     def delete_record(path: str = "") -> Response:
         """
         Handle Endpoint: DELETE /record/<string:record>
@@ -109,7 +108,7 @@ def routes(app: Flask, start_time: float, version: str):
         if util.is_record(record):
             return Response(json.dumps({
                 "deleted": cache.delete(record)
-            }), mimetype = "application/json")
+            }), mimetype="application/json")
 
         # OTHERWISE: OUTPUT ERROR
         return Response(json.dumps({
@@ -117,4 +116,4 @@ def routes(app: Flask, start_time: float, version: str):
                 "message": "Record does not exist: " + str(util.get_record(record)),
                 "errno": 0,
             }]
-        }), mimetype = "application/json")
+        }), mimetype="application/json")

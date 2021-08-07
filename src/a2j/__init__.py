@@ -77,7 +77,7 @@ def parse(record: str, commands: list) -> dict:
             data = cached_data
 
         else:
-            with util.get_record(record).open(mode = "rb") as file:
+            with util.get_record(record).open(mode="rb") as file:
                 summary = None
 
                 try:

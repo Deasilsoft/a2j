@@ -40,11 +40,11 @@ def create(record: str, commands: list, data: dict):
     cache_file = get_path(record, commands)
 
     # CREATE MISSING DIRECTORIES
-    cache_file.parent.mkdir(parents = True, exist_ok = True)
+    cache_file.parent.mkdir(parents=True, exist_ok=True)
 
     # DUMP JSON OBJECT INTO FILE
-    with cache_file.open(mode = "w") as file:
-        json.dump(data, file, cls = encoder.JSONEncoder)
+    with cache_file.open(mode="w") as file:
+        json.dump(data, file, cls=encoder.JSONEncoder)
         file.close()
 
 
