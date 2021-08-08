@@ -1,4 +1,4 @@
-# deasilsoft/a2j
+# Deasilsoft/a2j
 
 A Restful JSON API for analyzing Age of Empires II records.
 
