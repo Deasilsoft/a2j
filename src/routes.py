@@ -27,7 +27,7 @@ import os
 import time
 from io import BytesIO
 
-from flask import Flask, Response, send_file
+from flask import Flask, request, Response, send_file
 
 from . import a2j
 from .a2j import cache, encoder, minimap, util
@@ -79,11 +79,18 @@ def routes(app: Flask, start_time: float, version: str):
         # IF RECORD EXISTS
         if util.is_record(record):
 
+            # MINIMAP SCALE
+            scale = 5
+
+            # SET SCALE FROM USER-INPUT
+            if "scale" in request.args and request.args.get("scale").isdigit():
+                scale = int(request.args.get("scale"))
+
             # PREPARE IMAGE
             img = BytesIO()
 
             # CREATE MINIMAP IMAGE
-            minimap.create(record).save(img, "PNG", quality=100)
+            minimap.create(record, scale).save(img, "PNG", quality=100)
 
             img.seek(0)
 

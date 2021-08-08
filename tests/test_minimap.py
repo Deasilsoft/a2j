@@ -53,5 +53,20 @@ class TestIndex(unittest.TestCase):
         assert response.mimetype == "image/png"
         assert response.status_code == 200
 
-        # CLEAR CACHE AFTER TESTING
-        self.client.delete("/record/test.mgz/")
+    def test_minimap_scale_1(self):
+        response = self.client.get("/minimap/test.mgz/?scale=1")
+
+        assert response.mimetype == "image/png"
+        assert response.status_code == 200
+
+    def test_minimap_scale_100(self):
+        response = self.client.get("/minimap/test.mgz/?scale=100")
+
+        assert response.mimetype == "image/png"
+        assert response.status_code == 200
+
+    def test_minimap_scale_string(self):
+        response = self.client.get("/minimap/test.mgz/?scale=abc")
+
+        assert response.mimetype == "image/png"
+        assert response.status_code == 200

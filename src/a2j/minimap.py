@@ -29,11 +29,12 @@ from PIL import Image
 from . import parse
 
 
-def create(record: str) -> Image:
+def create(record: str, scale: int) -> Image:
     """
     Create the minimap image from record.
 
-    :param record: User-supplied record file.
+    :param (str) record: User-supplied record file.
+    :param (int) scale: User-supplied scale.
     :return: Minimap image.
     :rtype: Image
     """
@@ -69,7 +70,7 @@ def create(record: str) -> Image:
             img.putpixel((ox, oy), colors_objects()[oid])
 
     # UPSCALE IMAGE
-    img = img.resize((1024, 1024), PIL.Image.NEAREST)
+    img = img.resize((min(max(scale, 1), 15) * dimension, min(max(scale, 1), 15) * dimension), PIL.Image.NEAREST)
 
     return img
 
@@ -187,6 +188,15 @@ def colors_terrain() -> dict:
     Credit for a list of Age of Empires II terrain and player colors goes to:
         https://github.com/goto-bus-stop/recanalyst.
 
+    This function has great potential for contributions from designers
+    and other specialists.
+
+    Got information what Terrain IDs are what?
+    Got better color suggestions?
+
+    Please create an issue https://github.com/Deasilsoft/a2j/issues!
+    Pull requests would be even more awesome!
+
     :rtype: dict
     """
 
@@ -293,9 +303,9 @@ def colors_terrain() -> dict:
 
         # CLIFFS
         16: {
-            0: (169, 21, 21),
-            1: (169, 21, 21),
-            2: (169, 21, 21),
+            0: (128, 100, 100),
+            1: (128, 100, 100),
+            2: (128, 100, 100),
         },
 
         17: {

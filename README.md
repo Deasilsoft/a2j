@@ -64,7 +64,7 @@ which is easy to handle in any programming language.
 ### Endpoints
 
     container_name:5000/
-    container_name:5000/minimap/<record>/ (W.I.P.)
+    container_name:5000/minimap/<record>/?[scale=1-15|5]
     container_name:5000/record/<record>/<commands...>/
 
 Whenever you get a list of `endpoints` from a request, you can add one of them at the end of your current path.
@@ -83,7 +83,9 @@ This example will retrieve a JSON object of all the `teams` and `players` from t
 
 #### Minimap
 
-(W.I.P.)
+This example will retrieve a PNG image with our interpretation of the Age of Empires II minimap.
+
+    curl container_name:5000/minimap/test.mgz/
 
 ### DELETE
 
