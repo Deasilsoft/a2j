@@ -32,6 +32,9 @@ ENV VENV=/home/a2j/venv
 RUN python -m venv ${VENV}
 ENV PATH="${VENV}/bin:${PATH}"
 
+# INSTALL WHEEL TO INCREASE SPEED
+RUN pip install --no-cache-dir wheel
+
 # COPY REQUIREMENTS
 COPY requirements requirements
 
