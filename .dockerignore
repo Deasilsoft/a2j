@@ -1,10 +1,12 @@
+# VIRTUAL ENVIRONMENT
 venv
-.git
-.github
-Dockerfile
-.gitignore
+
+# IDE
 .idea
+
+# PYTHON
 __pycache__
 .pytest_cache
-docker-compose.yml
-.dockerignore
+
+# GITHUB
+.github
