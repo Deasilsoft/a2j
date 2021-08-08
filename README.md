@@ -97,3 +97,10 @@ To delete all **cached data** from a `record` you can do the following.
 
 This is useful in cases where you replace a `record` and want to generate a new cache, or for a general cleanup. Generally, you don't want to remove cached data unless the `record`
 has changed.
+
+---
+
+## Credits
+
+* Thanks to [@happyleavesaoc](https://github.com/happyleavesaoc) for maintaining [aoc-mgz](https://github.com/happyleavesaoc/aoc-mgz) and for answering my questions on Discord.
+* Thanks to [recanalyst](https://github.com/goto-bus-stop/recanalyst) for minimap colors.
