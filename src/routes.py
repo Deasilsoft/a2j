@@ -25,11 +25,12 @@ SOFTWARE.
 import json
 import os
 import time
+from io import BytesIO
 
-from flask import Flask, Response
+from flask import Flask, Response, send_file
 
 from . import a2j
-from .a2j import cache, encoder, util
+from .a2j import cache, encoder, minimap, util
 
 
 def routes(app: Flask, start_time: float, version: str):
@@ -58,6 +59,44 @@ def routes(app: Flask, start_time: float, version: str):
             "endpoints": ["record"]
         }), mimetype="application/json")
 
+    @app.route("/minimap", methods=["GET"])
+    @app.route("/minimap/", methods=["GET"])
+    @app.route("/minimap/<path:path>", methods=["GET"])
+    @app.route("/minimap/<path:path>/", methods=["GET"])
+    def get_minimap(path: str = "") -> Response:
+        """
+        Handle Endpoint: GET /minimap/<path:path>
+
+            <path:path> The path with record.
+
+        :return: HTTP Response.
+        :rtype: Response
+        """
+
+        # GET RECORD
+        record = path.split("/")[0]
+
+        # IF RECORD EXISTS
+        if util.is_record(record):
+
+            # PREPARE IMAGE
+            img = BytesIO()
+
+            # CREATE MINIMAP IMAGE
+            minimap.create(record).save(img, "PNG", quality=100)
+
+            img.seek(0)
+
+            return send_file(img, mimetype="image/png", download_name=record + ".minimap.png")
+
+        # OTHERWISE: OUTPUT ERROR
+        return Response(json.dumps({
+            "errors": [{
+                "message": "Record does not exist: " + str(util.get_record(record)),
+                "errno": 0,
+            }]
+        }), mimetype="application/json")
+
     @app.route("/record", methods=["GET"])
     @app.route("/record/", methods=["GET"])
     @app.route("/record/<path:path>", methods=["GET"])
@@ -66,7 +105,7 @@ def routes(app: Flask, start_time: float, version: str):
         """
         Handle Endpoint: GET /record/<path:path>
 
-            <path:path> The path with record and commands data.
+            <path:path> The path with record and commands.
 
         :return: HTTP Response.
         :rtype: Response
@@ -96,6 +135,8 @@ def routes(app: Flask, start_time: float, version: str):
     def delete_record(path: str = "") -> Response:
         """
         Handle Endpoint: DELETE /record/<string:record>
+
+            <path:path> The path with record.
 
         :return: HTTP Response.
         :rtype: Response

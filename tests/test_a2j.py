@@ -69,6 +69,7 @@ class TestA2J(unittest.TestCase):
             file.close()
 
     def test_data(self):
+        # META
         assert self.parsed["completed"] == self.read["completed"]
         assert self.parsed["dataset"] == self.read["dataset"]
         assert self.parsed["encoding"] == self.read["encoding"]
@@ -80,13 +81,17 @@ class TestA2J(unittest.TestCase):
         assert self.parsed["platform"] == self.read["platform"]
         assert self.parsed["restored"] == self.read["restored"]
         assert self.parsed["version"] == self.read["version"]
+
+        # PLAYERS
+        assert self.parsed["achievements"] == self.read["achievements"]
         assert self.parsed["chat"] == self.read["chat"]
         assert self.parsed["diplomacy"] == self.read["diplomacy"]
         assert self.parsed["players"] == self.read["players"]
         assert self.parsed["profiles"] == self.read["profiles"]
         assert self.parsed["ratings"] == self.read["ratings"]
         assert self.parsed["teams"] == self.read["teams"]
-        assert self.parsed["achievements"] == self.read["achievements"]
+
+        # GAME
         assert self.parsed["duration"] == self.read["duration"]
         assert self.parsed["map"] == self.read["map"]
         assert self.parsed["objects"] == self.read["objects"]

@@ -46,13 +46,13 @@ def available_commands() -> dict:
         "version": __get_version,
 
         # PLAYERS
+        "achievements": Summary.has_achievements,
         "chat": Summary.get_chat,
         "diplomacy": Summary.get_diplomacy,
         "players": Summary.get_players,
         "profiles": Summary.get_profile_ids,
         "ratings": Summary.get_ratings,
         "teams": Summary.get_teams,
-        "achievements": Summary.has_achievements,
 
         # GAME
         "duration": Summary.get_duration,

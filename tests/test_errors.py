@@ -91,3 +91,12 @@ class TestErrors(unittest.TestCase):
 
         assert data["errors"][0]["errno"] == 3
         assert data["errors"][0]["message"] == message
+
+    def test_minimap_does_not_exist(self):
+        data = self.client.get("/minimap/does-not-exist/not-tested/").get_json()
+        message = "Record does not exist: /home/a2j/records/does-not-exist"
+
+        assert len(data["errors"]) == 1
+
+        assert data["errors"][0]["errno"] == 0
+        assert data["errors"][0]["message"] == message
