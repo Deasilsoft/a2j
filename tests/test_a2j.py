@@ -53,7 +53,10 @@ class TestA2J(unittest.TestCase):
         # CLEAR CACHE BEFORE TESTING
         client.delete("/record/test.mgz/")
 
-        # GET DATA PARSED BY A2J
+        # PARSE DATA
+        client.get("/record/test.mgz/" + "/".join(available_commands()) + "/")
+
+        # GET CACHED DATA
         cls.parsed = client.get("/record/test.mgz/" + "/".join(available_commands()) + "/").get_json()
 
         # OPEN DATA FILE

@@ -21,45 +21,36 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+import os
+import time
+import unittest
 
-import _hashlib
-import json
+from flask import Flask
 
-import mgz
-import mgz.summary
+from ..src import a2j
+from ..src.routes import routes
 
 
-class JSONEncoder(json.JSONEncoder):
+class TestIndex(unittest.TestCase):
     """
-    A JSONEncoder for parsing Age of Empires II records.
+    Test index.
     """
 
-    def default(self, obj: any) -> any:
+    @classmethod
+    def setUpClass(cls):
         """
-        :param obj:
-        :rtype:
+        Setup the testing environment.
         """
 
-        if isinstance(obj, _hashlib.HASH):
-            return {
-                "type": obj.name,
-                "hex": obj.hexdigest(),
-            }
+        # SETUP FLASK TEST ENVIRONMENT
+        app = Flask(__name__)
+        routes(app, time.time(), a2j.get_version())
+        cls.client = app.test_client()
 
-        if isinstance(obj, mgz.Version):
-            return {
-                "name": obj.name,
-                "value": obj.value,
-            }
+    def test_index(self):
+        data = self.client.get("/").get_json()
 
-        if isinstance(obj, mgz.summary.chat.Chat):
-            return {
-                "name": obj.name,
-                "value": obj.value,
-            }
-
-        if isinstance(obj, (set, frozenset)):
-            return list(obj)
-
-        if isinstance(obj, bytes):
-            return obj.decode("unicode_escape")
+        assert data["version"] == a2j.get_version()
+        assert type(data["uptime"]) is float
+        assert data["environment"] == os.getenv("FLASK_ENV")
+        assert data["endpoints"] == ["record"]
