@@ -85,7 +85,7 @@ def routes(app: Flask, start_time: float, version: str):
         data = a2j.parse(record, commands)
 
         # FILL ENDPOINTS WITH MISSING COMMANDS
-        data["endpoints"] = [command for command in a2j.available_commands() if command not in commands]
+        data["endpoints"] = [c for c in a2j.available_commands() if c not in commands]
 
         return Response(json.dumps(data, cls=encoder.JSONEncoder), mimetype="application/json")
 

@@ -49,40 +49,45 @@ class TestErrors(unittest.TestCase):
 
     def test_record_does_not_exist(self):
         data = self.client.get("/record/does-not-exist/not-tested/").get_json()
+        message = "Record does not exist: /home/a2j/records/does-not-exist"
 
         assert len(data["errors"]) == 1
 
         assert data["errors"][0]["errno"] == 0
-        assert data["errors"][0]["message"] == "Record does not exist: /home/a2j/records/does-not-exist"
+        assert data["errors"][0]["message"] == message
 
     def test_record_injection(self):
         data = self.client.get("/record/../injection.py/version/").get_json()
+        message = "Record does not exist: /home/a2j/records/.."
 
         assert len(data["errors"]) == 1
 
         assert data["errors"][0]["errno"] == 0
-        assert data["errors"][0]["message"] == "Record does not exist: /home/a2j/records/.."
+        assert data["errors"][0]["message"] == message
 
     def test_record_deletion_failure(self):
         data = self.client.delete("/record/does-not-exist/").get_json()
+        message = "Record does not exist: /home/a2j/records/does-not-exist"
 
         assert len(data["errors"]) == 1
 
         assert data["errors"][0]["errno"] == 0
-        assert data["errors"][0]["message"] == "Record does not exist: /home/a2j/records/does-not-exist"
+        assert data["errors"][0]["message"] == message
 
     def test_command_does_not_exist(self):
         data = self.client.get("/record/test.mgz/not-real/fake-command/123/version/").get_json()
+        message = "Invalid commands: ['123', 'fake-command', 'not-real']"
 
         assert len(data["errors"]) == 1
 
         assert data["errors"][0]["errno"] == 1
-        assert data["errors"][0]["message"] == "Invalid commands: ['123', 'fake-command', 'not-real']"
+        assert data["errors"][0]["message"] == message
 
     def test_commands_are_empty(self):
         data = self.client.get("/record/test.mgz/").get_json()
+        message = "No commands received."
 
         assert len(data["errors"]) == 1
 
         assert data["errors"][0]["errno"] == 3
-        assert data["errors"][0]["message"] == "No commands received."
+        assert data["errors"][0]["message"] == message

@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-
+import re
 from pathlib import Path
 from typing import List
 
@@ -70,7 +70,10 @@ def is_record(path: str) -> bool:
     :rtype: bool
     """
 
-    return path != "" and ".." not in path and "/" not in path and "\\" not in path and get_record(path).exists()
+    if re.search(r"^\.+|\\|/", path) is None:
+        return get_record(path).exists()
+
+    return False
 
 
 def get_record(path: str) -> Path:

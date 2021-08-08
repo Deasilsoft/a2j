@@ -36,7 +36,7 @@ class JSONEncoder(json.JSONEncoder):
 
     def default(self, obj: any) -> any:
         """
-        :param obj:
+        :param obj: The object to convert to something JSON-friendly.
         :rtype:
         """
 
@@ -63,3 +63,5 @@ class JSONEncoder(json.JSONEncoder):
 
         if isinstance(obj, bytes):
             return obj.decode("unicode_escape")
+
+        return json.JSONEncoder.default(self, obj)
