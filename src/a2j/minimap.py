@@ -24,12 +24,11 @@ SOFTWARE.
 """
 
 import PIL
-from PIL import Image
 
 from . import parse
 
 
-def create(record: str, scale: int) -> Image:
+def create(record: str, scale: int) -> PIL.Image:
     """
     Create the minimap image from record.
 
@@ -46,7 +45,7 @@ def create(record: str, scale: int) -> Image:
     dimension = data["map"]["dimension"]
 
     # CREATE IMAGE OBJECT
-    img = Image.new("RGB", (dimension, dimension))
+    img = PIL.Image.new("RGB", (dimension, dimension))
 
     # DRAW TILES
     for tile in data["map"]["tiles"]:
