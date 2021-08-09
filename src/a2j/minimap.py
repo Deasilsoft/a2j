@@ -23,12 +23,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import PIL
+from PIL import Image
 
 from . import parse
 
 
-def create(record: str, scale: int) -> PIL.Image:
+def create(record: str, scale: int) -> Image:
     """
     Create the minimap image from record.
 
@@ -45,7 +45,7 @@ def create(record: str, scale: int) -> PIL.Image:
     dimension = data["map"]["dimension"]
 
     # CREATE IMAGE OBJECT
-    img = PIL.Image.new("RGB", (dimension, dimension))
+    img = Image.new("RGB", (dimension, dimension))
 
     # DRAW TILES
     for tile in data["map"]["tiles"]:
@@ -69,7 +69,7 @@ def create(record: str, scale: int) -> PIL.Image:
             img.putpixel((ox, oy), colors_objects()[oid])
 
     # UPSCALE IMAGE
-    img = img.resize((min(max(scale, 1), 15) * dimension, min(max(scale, 1), 15) * dimension), PIL.Image.NEAREST)
+    img = img.resize((min(max(scale, 1), 15) * dimension, min(max(scale, 1), 15) * dimension), Image.NEAREST)
 
     return img
 
