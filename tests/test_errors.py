@@ -48,64 +48,57 @@ class TestErrors(unittest.TestCase):
         cls.client = app.test_client()
 
     def test_record_does_not_exist(self):
-        data = self.client.get("/record/does-not-exist/not-tested/").get_json()
+        path = "/record/does-not-exist/not-tested/"
+        errno = 0
         message = "Record does not exist: /home/a2j/records/does-not-exist"
 
-        assert len(data["errors"]) == 1
-
-        assert data["errors"][0]["errno"] == 0
-        assert data["errors"][0]["message"] == message
+        self._test_error(path, errno, message)
 
     def test_record_direct_path_injection(self):
-        data = self.client.get("/record/../injection.py/version/").get_json()
+        path = "/record/../injection.py/version/"
+        errno = 0
         message = "Record does not exist: /home/a2j/records/.."
 
-        assert len(data["errors"]) == 1
-
-        assert data["errors"][0]["errno"] == 0
-        assert data["errors"][0]["message"] == message
+        self._test_error(path, errno, message)
 
     def test_record_traversal_encoding_path_injection(self):
-        data = self.client.get("/record/%2e%2e%2finjection.py/version/").get_json()
+        path = "/record/%2e%2e%2finjection.py/version/"
+        errno = 0
         message = "Record does not exist: /home/a2j/records/.."
 
-        assert len(data["errors"]) == 1
-
-        assert data["errors"][0]["errno"] == 0
-        assert data["errors"][0]["message"] == message
+        self._test_error(path, errno, message)
 
     def test_record_deletion_failure(self):
-        data = self.client.delete("/record/does-not-exist/").get_json()
+        path = "/record/does-not-exist/"
+        errno = 0
         message = "Record does not exist: /home/a2j/records/does-not-exist"
 
-        assert len(data["errors"]) == 1
-
-        assert data["errors"][0]["errno"] == 0
-        assert data["errors"][0]["message"] == message
+        self._test_error(path, errno, message)
 
     def test_command_does_not_exist(self):
-        data = self.client.get("/record/test.mgz/not-real/fake-command/123/version/").get_json()
+        path = "/record/test.mgz/not-real/fake-command/123/version/"
+        errno = 1
         message = "Invalid commands: ['123', 'fake-command', 'not-real']"
 
-        assert len(data["errors"]) == 1
-
-        assert data["errors"][0]["errno"] == 1
-        assert data["errors"][0]["message"] == message
+        self._test_error(path, errno, message)
 
     def test_commands_are_empty(self):
-        data = self.client.get("/record/test.mgz/").get_json()
+        path = "/record/test.mgz/"
+        errno = 3
         message = "No commands received."
 
-        assert len(data["errors"]) == 1
-
-        assert data["errors"][0]["errno"] == 3
-        assert data["errors"][0]["message"] == message
+        self._test_error(path, errno, message)
 
     def test_minimap_does_not_exist(self):
-        data = self.client.get("/minimap/does-not-exist/not-tested/").get_json()
+        path = "/minimap/does-not-exist/not-tested/"
+        errno = 0
         message = "Record does not exist: /home/a2j/records/does-not-exist"
 
-        assert len(data["errors"]) == 1
+        self._test_error(path, errno, message)
 
-        assert data["errors"][0]["errno"] == 0
+    def _test_error(self, path: str, errno: int, message: str):
+        data = self.client.get(path).get_json()
+
+        assert len(data["errors"]) == 1
+        assert data["errors"][0]["errno"] == errno
         assert data["errors"][0]["message"] == message
