@@ -56,8 +56,17 @@ class TestErrors(unittest.TestCase):
         assert data["errors"][0]["errno"] == 0
         assert data["errors"][0]["message"] == message
 
-    def test_record_injection(self):
+    def test_record_direct_path_injection(self):
         data = self.client.get("/record/../injection.py/version/").get_json()
+        message = "Record does not exist: /home/a2j/records/.."
+
+        assert len(data["errors"]) == 1
+
+        assert data["errors"][0]["errno"] == 0
+        assert data["errors"][0]["message"] == message
+
+    def test_record_traversal_encoding_path_injection(self):
+        data = self.client.get("/record/%2e%2e%2finjection.py/version/").get_json()
         message = "Record does not exist: /home/a2j/records/.."
 
         assert len(data["errors"]) == 1
