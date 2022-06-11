@@ -84,9 +84,6 @@ def invalid_commands(command_list: List[str], method: str) -> List[str]:
     :return:
     """
 
-    if not validate_method(method):
-        raise ValueError("Invalid method supplied.")
-
     commands = {
         "summary": summary_commands,
         "match": match_commands,

@@ -96,6 +96,27 @@ class TestErrors(unittest.TestCase):
 
         self._test_error(path, errno, message, self.client.get)
 
+    def test_invalid_method(self):
+        path = "/record/test.mgz/players/?method=invalid"
+        errno = 4
+        message = "Invalid method: invalid"
+
+        self._test_error(path, errno, message, self.client.get)
+
+    def test_corrupt_record_summary(self):
+        path = "/record/corrupt.aoe2record/players/"
+        errno = 2
+        message = "Parsing AoE2 record stopped with this error: invalid mgz file: could not read enough bytes, expected 1920102207, found 8"
+
+        self._test_error(path, errno, message, self.client.get)
+
+    def test_corrupt_record_match(self):
+        path = "/record/corrupt.aoe2record/players/?method=match"
+        errno = 2
+        message = "Parsing AoE2 record stopped with this error: could not parse"
+
+        self._test_error(path, errno, message, self.client.get)
+
     @staticmethod
     def _test_error(path: str, errno: int, message: str, function: callable):
         data = function(path).get_json()

@@ -83,8 +83,6 @@ class JSONEncoder(json.JSONEncoder):
             if obj.__name__ in ["latin_1_encode", "latin_1_decode"]:
                 return ""
 
-            return obj()
-
         if isinstance(obj, Player):
             # TODO: support team once the Circularity Error has been resolved
             obj.team = None

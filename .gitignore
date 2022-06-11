@@ -1,6 +1,7 @@
 # RECORDS
 records/*
 !records/test.mgz
+!records/corrupt.aoe2record
 
 # IDE
 .idea

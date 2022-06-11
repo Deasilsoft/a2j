@@ -13,10 +13,11 @@ services:
     ports:
       - "5000:5000"
 
-    # Bind records and src directories
+    # Bind records, src, and tests directories
     volumes:
       - "./records:/home/a2j/records"
       - "./src:/home/a2j/src"
+      - "./tests:/home/a2j/tests"
 
   production:
 

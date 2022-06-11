@@ -26,6 +26,8 @@ A Restful JSON API as a service for analyzing Age of Empires II records.
 
 1. Copy the `production` service found in `docker-compose.yml` to your project.
 
+Delete `test.mgz` and `corrupt.aoe2record` from the `records` directory.
+
 ### Direct Download & Docker Compose (Development)
 
 1. Clone Deasilsoft/a2j and open the project directory with `git clone https://github.com/Deasilsoft/a2j.git && cd a2j`
@@ -41,6 +43,8 @@ A Restful JSON API as a service for analyzing Age of Empires II records.
 
 1. Pull the image from Docker Hub with `docker pull deasilsoft/a2j:latest`
 2. Run the Docker container with `docker run -d --name a2j -v ABSOLUTE_PATH_TO_RECORDS:/home/a2j/records --restart always deasilsoft/a2j:latest`
+
+Delete `test.mgz` and `corrupt.aoe2record` from the `records` directory.
 
 *Remember to replace **ABSOLUTE_PATH_TO_RECORDS** with your own value.*
 
