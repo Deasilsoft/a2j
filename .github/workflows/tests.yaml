@@ -13,10 +13,10 @@ jobs:
         run: docker-compose up --build -d
 
       - name: Run Pytest & Coverage
-        run: docker-compose exec development pytest --cov=src --cov-report=xml tests
+        run: docker-compose exec -T development pytest --cov=src --cov-report=xml tests
 
       - name: Install Git
-        run: docker-compose exec -u 0 development apk --no-cache add git
+        run: docker-compose exec -T -u 0 development apk --no-cache add git
 
       - name: Send Coverage Report To Codecov
-        run: docker-compose exec development codecov -t ${{ secrets.CODECOV_TOKEN }}
+        run: docker-compose exec -T development codecov -t ${{ secrets.CODECOV_TOKEN }}
