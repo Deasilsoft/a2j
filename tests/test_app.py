@@ -22,17 +22,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import time
+import unittest
 
-from flask import Flask
+from ..src.app import app, status
 
-from . import a2j
-from .routes import routes
 
-# GET FLASK
-app = Flask(__name__)
+class TestCache(unittest.TestCase):
+    """
+    Test data caching.
+    """
 
-# BIND ROUTES
-routes(app, time.time(), a2j.get_version())
+    def test_app(self):
+        assert app.name == "a2j.src.app"
 
-status = True
+    def test_status(self):
+        assert status is True
