@@ -23,19 +23,20 @@ SOFTWARE.
 """
 
 from pathlib import Path
+from typing import List
 
 import mgz.summary
 
 from . import cache, util
-from .commands import available_commands
+from .commands import summary_commands
 
 
-def parse(record: str, commands: list) -> dict:
+def parse(record: str, command_list: List[str]) -> dict:
     """
     Parse Age of Empires II record and retrieve JSON object built on the user-supplied commands.
 
     :param (str) record: User-supplied record file.
-    :param (list) commands: User-supplied commands.
+    :param (List[str]) command_list: User-supplied commands.
     :return: JSON object
     :rtype: dict
     """
@@ -45,7 +46,11 @@ def parse(record: str, commands: list) -> dict:
     }
 
     # SORT COMMANDS TO HAVE A REPEATABLE STRUCTURE OF THE JSON OBJECT
-    commands.sort()
+    command_list.sort()
+
+    # IF COMMANDS CONTAIN ALL; CLEAR ALL OTHER COMMANDS
+    if "all" in command_list:
+        command_list = ["all"]
 
     # CHECK IF USER-SUPPLIED RECORD IS VALID
     if not util.is_record(record):
@@ -55,23 +60,23 @@ def parse(record: str, commands: list) -> dict:
         })
 
     # CHECK IF USER-SUPPLIED COMMANDS ARE EMPTY
-    elif not commands:
+    elif not command_list:
         data["errors"].append({
             "message": "No commands received.",
             "errno": 3
         })
 
     # CHECK IF USER-SUPPLIED COMMANDS ARE VALID
-    elif not util.validate_commands(commands):
+    elif not util.validate_commands(command_list):
         data["errors"].append({
-            "message": "Invalid commands: " + str(util.invalid_commands(commands)),
+            "message": "Invalid commands: " + str(util.invalid_commands(command_list)),
             "errno": 1
         })
 
     # OPEN THE RECORD FILE
     else:
         # FIRST GET CACHE IF AVAILABLE
-        cached_data, is_cached = cache.read(record, commands)
+        cached_data, is_cached = cache.read(record, command_list)
 
         if is_cached:
             data = cached_data
@@ -82,8 +87,8 @@ def parse(record: str, commands: list) -> dict:
 
                 try:
                     # SET THE LOGGER TO AN IMPOSSIBLY HIGH LEVEL TO PREVENT WEIRD OUTPUT
-                    mgz.summary.LOGGER.setLevel(9001)
-                    summary = mgz.summary.Summary(file)
+                    mgz.summary.logger.setLevel(9001)
+                    summary = mgz.summary.FullSummary(file)
 
                 except RuntimeError as err:
                     data["errors"].append({
@@ -93,13 +98,21 @@ def parse(record: str, commands: list) -> dict:
 
                 # PUT THE RECORD DATA INSIDE OUR ARRAY
                 if summary is not None:
-                    for command in util.valid_commands(commands):
-                        data[command] = available_commands().get(command)(summary)
+                    # HANDLE SPECIAL ALL COMMAND
+                    if "all" in command_list:
+                        for command in summary_commands().keys():
+                            if command != "all":
+                                data[command] = summary_commands().get(command)(summary)
+
+                    # HANDLE SUMMARY COMMANDS
+                    else:
+                        for command in util.valid_commands(command_list):
+                            data[command] = summary_commands().get(command)(summary)
 
                 file.close()
 
             # PUT TO CACHE
-            cache.create(record, commands, data)
+            cache.create(record, command_list, data)
 
     return data
 

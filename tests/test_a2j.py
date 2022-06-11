@@ -30,7 +30,7 @@ from pathlib import Path
 from flask import Flask
 
 from ..src import a2j
-from ..src.a2j.commands import available_commands
+from ..src.a2j.commands import summary_commands
 from ..src.routes import routes
 
 
@@ -54,10 +54,10 @@ class TestA2J(unittest.TestCase):
         client.delete("/record/test.mgz/")
 
         # PARSE DATA
-        client.get("/record/test.mgz/" + "/".join(available_commands()) + "/")
+        client.get("/record/test.mgz/" + "/".join(summary_commands()) + "/")
 
         # GET CACHED DATA
-        response = client.get("/record/test.mgz/" + "/".join(available_commands()) + "/")
+        response = client.get("/record/test.mgz/" + "/".join(summary_commands()) + "/")
         cls.parsed = response.get_json()
 
         # OPEN DATA FILE

@@ -52,7 +52,7 @@ class JSONEncoder(json.JSONEncoder):
                 "value": obj.value,
             }
 
-        if isinstance(obj, mgz.summary.chat.Chat):
+        if isinstance(obj, mgz.summary.full.Chat):
             return {
                 "name": obj.name,
                 "value": obj.value,

@@ -23,6 +23,7 @@ SOFTWARE.
 """
 
 from PIL import Image
+from PIL.Image import Resampling
 
 from . import parse
 
@@ -68,7 +69,7 @@ def create(record: str, scale: int) -> Image:
             img.putpixel((ox, oy), colors_objects()[oid])
 
     # UPSCALE IMAGE
-    img = img.resize((min(max(scale, 1), 15) * dimension, min(max(scale, 1), 15) * dimension), Image.NEAREST)
+    img = img.resize((min(max(scale, 1), 15) * dimension, min(max(scale, 1), 15) * dimension), Resampling.NEAREST)
 
     return img
 
