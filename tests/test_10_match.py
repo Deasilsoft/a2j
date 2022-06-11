@@ -38,6 +38,8 @@ class TestA2J(unittest.TestCase):
     Test parsing of Age of Empires II record.
     """
 
+    client = None
+
     @classmethod
     def setUpClass(cls):
         """
@@ -47,13 +49,13 @@ class TestA2J(unittest.TestCase):
         # SETUP FLASK TEST ENVIRONMENT
         app = Flask(__name__)
         routes(app, time.time(), a2j.get_version())
-        client = app.test_client()
+        cls.client = app.test_client()
 
         # CLEAR CACHE BEFORE TESTING
-        client.delete("/record/test.mgz/")
+        cls.client.delete("/record/test.mgz/")
 
         # GET CACHED DATA
-        response = client.get("/record/test.mgz/all/?method=match")
+        response = cls.client.get("/record/test.mgz/all/?method=match")
         cls.parsed = response.get_json()
 
         # OPEN DATA FILE
@@ -108,3 +110,8 @@ class TestA2J(unittest.TestCase):
         assert self.parsed["inputs"] == self.read["inputs"]
         assert self.parsed["lobby"] == self.read["lobby"]
         assert self.parsed["map"] == self.read["map"]
+
+    def test_players(self):
+        parsed = self.client.get("/record/test.mgz/players/?method=match").get_json()
+
+        assert parsed["players"] == self.read["players"]
