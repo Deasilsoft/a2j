@@ -33,6 +33,9 @@ def match_commands() -> List[str]:
     """
 
     return [
+        # SPECIAL
+        "all",
+
         # META
         "completed",
         "diplomacy_type",

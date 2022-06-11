@@ -28,16 +28,17 @@ from pathlib import Path
 from . import encoder
 
 
-def create(record: str, commands: list, data: dict):
+def create(record: str, commands: list, method: str, data: dict):
     """
     Put JSON object in cache.
 
     :param (str) record: User-supplied record file.
     :param (list) commands: User-supplied commands.
+    :param (str) method: User-supplied method.
     :param (dict) data: JSON object.
     """
 
-    cache_file = get_path(record, commands)
+    cache_file = get_path(record, commands, method)
 
     # CREATE MISSING DIRECTORIES
     cache_file.parent.mkdir(parents=True, exist_ok=True)
@@ -48,19 +49,20 @@ def create(record: str, commands: list, data: dict):
         file.close()
 
 
-def read(record: str, commands: list) -> (dict, bool):
+def read(record: str, commands: list, method: str) -> (dict, bool):
     """
     Get JSON object from cache.
 
     :param (str) record: User-supplied record file.
     :param (list) commands: User-supplied commands.
+    :param (str) method: User-supplied method.
     :return: JSON object, True if cache file exists; otherwise False.
     :rtype: (dict, bool)
     """
 
     cached_data = {}
     is_cached = False
-    cache_file = get_path(record, commands)
+    cache_file = get_path(record, commands, method)
 
     if cache_file.exists():
         # IS CACHED
@@ -92,19 +94,20 @@ def delete(record: str) -> int:
     return counter
 
 
-def get_path(record: str, commands: list) -> Path:
+def get_path(record: str, commands: list, method: str) -> Path:
     """
     Get path to cache file with data.
 
     :param (str) record: User-supplied record file.
     :param (list) commands: User-supplied commands.
+    :param (str) method: User-supplied method.
     :return: File path.
     :rtype: str
     """
 
     commands.sort()
 
-    return get_root().joinpath(*commands) / record
+    return get_root().joinpath(method).joinpath(*commands) / record
 
 
 def get_root() -> Path:

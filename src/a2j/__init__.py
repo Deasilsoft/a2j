@@ -25,18 +25,20 @@ SOFTWARE.
 from pathlib import Path
 from typing import List
 
+import mgz.model
 import mgz.summary
 
 from . import cache, util
-from .commands import summary_commands
+from .commands import match_commands, summary_commands
 
 
-def parse(record: str, command_list: List[str]) -> dict:
+def parse(record: str, command_list: List[str], method: str = "summary") -> dict:
     """
     Parse Age of Empires II record and retrieve JSON object built on the user-supplied commands.
 
     :param (str) record: User-supplied record file.
     :param (List[str]) command_list: User-supplied commands.
+    :param (str) method: User-supplied method.
     :return: JSON object
     :rtype: dict
     """
@@ -66,53 +68,88 @@ def parse(record: str, command_list: List[str]) -> dict:
             "errno": 3
         })
 
-    # CHECK IF USER-SUPPLIED COMMANDS ARE VALID
-    elif not util.validate_commands(command_list):
+    # CHECK IF USER-SUPPLIED METHOD IS VALID
+    elif not util.validate_method(method):
         data["errors"].append({
-            "message": "Invalid commands: " + str(util.invalid_commands(command_list)),
+            "message": "Invalid method: " + method,
+            "errno": 4
+        })
+
+    # CHECK IF USER-SUPPLIED COMMANDS ARE VALID
+    elif not util.validate_commands(command_list, method):
+        data["errors"].append({
+            "message": "Invalid commands: " + str(util.invalid_commands(command_list, method)),
             "errno": 1
         })
 
     # OPEN THE RECORD FILE
     else:
         # FIRST GET CACHE IF AVAILABLE
-        cached_data, is_cached = cache.read(record, command_list)
+        cached_data, is_cached = cache.read(record, command_list, method)
 
         if is_cached:
             data = cached_data
 
         else:
             with util.get_record(record).open(mode="rb") as file:
-                summary = None
+                # HANDLE SUMMARY METHOD
+                if method == "summary":
+                    summary = None
 
-                try:
-                    # SET THE LOGGER TO AN IMPOSSIBLY HIGH LEVEL TO PREVENT WEIRD OUTPUT
-                    mgz.summary.logger.setLevel(9001)
-                    summary = mgz.summary.FullSummary(file)
+                    try:
+                        # SET THE LOGGER TO AN IMPOSSIBLY HIGH LEVEL TO PREVENT WEIRD OUTPUT
+                        mgz.summary.logger.setLevel(9001)
+                        summary = mgz.summary.FullSummary(file)
 
-                except RuntimeError as err:
-                    data["errors"].append({
-                        "message": "Parsing AoE2 record stopped with this error: " + str(err),
-                        "errno": 2
-                    })
+                    except RuntimeError as err:
+                        data["errors"].append({
+                            "message": "Parsing AoE2 record stopped with this error: " + str(err),
+                            "errno": 2
+                        })
 
-                # PUT THE RECORD DATA INSIDE OUR ARRAY
-                if summary is not None:
-                    # HANDLE SPECIAL ALL COMMAND
-                    if "all" in command_list:
-                        for command in summary_commands().keys():
-                            if command != "all":
+                    # PUT THE RECORD DATA INSIDE OUR ARRAY
+                    if summary is not None:
+                        # HANDLE SPECIAL ALL COMMAND
+                        if "all" in command_list:
+                            for command in summary_commands().keys():
+                                if command != "all":
+                                    data[command] = summary_commands().get(command)(summary)
+
+                        # HANDLE SUMMARY COMMANDS
+                        else:
+                            for command in util.valid_summary_commands(command_list):
                                 data[command] = summary_commands().get(command)(summary)
 
-                    # HANDLE SUMMARY COMMANDS
-                    else:
-                        for command in util.valid_commands(command_list):
-                            data[command] = summary_commands().get(command)(summary)
+                # HANDLE MATCH METHOD
+                elif method == "match":
+                    match = None
+
+                    try:
+                        match = mgz.model.parse_match(file)
+
+                    except RuntimeError as err:
+                        data["errors"].append({
+                            "message": "Parsing AoE2 record stopped with this error: " + str(err),
+                            "errno": 2
+                        })
+
+                    # PUT THE RECORD DATA INSIDE OUR ARRAY
+                    if match is not None:
+                        # HANDLE SPECIAL ALL COMMAND
+                        if "all" in command_list:
+                            for command in match_commands():
+                                if command != "all":
+                                    data[command] = match.__getattribute__(command)
+
+                        # HANDLE MATCH COMMANDS
+                        else:
+                            for command in util.valid_match_commands(command_list):
+                                data[command] = match.__getattribute__(command)
 
                 file.close()
 
             # PUT TO CACHE
-            cache.create(record, command_list, data)
+            cache.create(record, command_list, method, data)
 
     return data
 

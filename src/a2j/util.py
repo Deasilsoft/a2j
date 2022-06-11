@@ -27,23 +27,35 @@ import urllib.parse
 from pathlib import Path
 from typing import List
 
-from .commands import summary_commands
+from .commands import match_commands, summary_commands
 
 
-def validate_commands(command_list: List[str]) -> bool:
+def validate_commands(command_list: List[str], method: str) -> bool:
     """
     Is the list of user-supplied commands valid?
 
     :param (List[str]) command_list: User-supplied commands.
+    :param (str) method: User-supplied method.
     :return: bool
     """
 
-    return not invalid_commands(command_list)
+    return not invalid_commands(command_list, method)
 
 
-def valid_commands(command_list: List[str]) -> List[str]:
+def validate_method(method: str) -> bool:
     """
-    Get list of valid commands from list of commands.
+    Is the user-supplied method valid?
+
+    :param (str) method: User-supplied method.
+    :return: bool
+    """
+
+    return method in ["summary", "match"]
+
+
+def valid_summary_commands(command_list: List[str]) -> List[str]:
+    """
+    Get list of valid summary commands from list of commands.
 
     :param (list) command_list: User-supplied commands.
     :return:
@@ -52,15 +64,35 @@ def valid_commands(command_list: List[str]) -> List[str]:
     return [command for command in command_list if command in summary_commands()]
 
 
-def invalid_commands(command_list: List[str]) -> List[str]:
+def valid_match_commands(command_list: List[str]) -> List[str]:
     """
-    Get list of invalid commands from list of commands.
+    Get list of valid match commands from list of commands.
 
     :param (list) command_list: User-supplied commands.
     :return:
     """
 
-    return [command for command in command_list if command not in summary_commands()]
+    return [command for command in command_list if command in match_commands()]
+
+
+def invalid_commands(command_list: List[str], method: str) -> List[str]:
+    """
+    Get list of invalid commands from list of commands.
+
+    :param (list) command_list: User-supplied commands.
+    :param (str) method: User-supplied method.
+    :return:
+    """
+
+    if not validate_method(method):
+        raise ValueError("Invalid method supplied.")
+
+    commands = {
+        "summary": summary_commands,
+        "match": match_commands,
+    }
+
+    return [command for command in command_list if command not in commands.get(method)()]
 
 
 def is_record(path: str) -> bool:

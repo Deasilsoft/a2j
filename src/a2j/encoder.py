@@ -23,10 +23,16 @@ SOFTWARE.
 """
 
 import _hashlib
+import codecs
+import inspect
 import json
+import types
+from datetime import timedelta
+from enum import Enum
 
 import mgz
 import mgz.summary
+from mgz.model import Player
 
 
 class JSONEncoder(json.JSONEncoder):
@@ -63,5 +69,29 @@ class JSONEncoder(json.JSONEncoder):
 
         if isinstance(obj, bytes):
             return obj.decode("unicode_escape")
+
+        if isinstance(obj, (codecs.CodecInfo, Enum)):
+            return obj.name
+
+        if isinstance(obj, timedelta):
+            return str(obj)
+
+        if isinstance(obj, types.MappingProxyType):
+            return dict(obj)
+
+        if inspect.isbuiltin(obj):
+            if obj.__name__ in ["latin_1_encode", "latin_1_decode"]:
+                return ""
+
+            return obj()
+
+        if isinstance(obj, Player):
+            # TODO: support team once the Circularity Error has been resolved
+            obj.team = None
+
+            return obj.__dict__
+
+        if hasattr(obj, "__dict__"):
+            return obj.__dict__
 
         return json.JSONEncoder.default(self, obj)

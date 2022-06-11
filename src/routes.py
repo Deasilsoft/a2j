@@ -127,12 +127,24 @@ def routes(app: Flask, start_time: float, version: str):
         # FILTER EMPTY COMMANDS
         commands = list(filter(lambda command: command != "", commands))
 
-        # PARSE DATA
-        data = a2j.parse(record, commands)
+        # PARSE METHOD
+        method = "summary"
 
-        # FILL ENDPOINTS WITH MISSING COMMANDS
+        # SET PARSE METHOD FROM USER-INPUT
+        if "method" in request.args and request.args.get("method").isalpha():
+            method = str(request.args.get("method"))
+
+        # PARSE DATA
+        data = a2j.parse(record, commands, method)
+
         if "all" not in commands:
-            data["endpoints"] = [c for c in a2j.summary_commands() if c not in commands]
+            if method == "summary":
+                # FILL ENDPOINTS WITH MISSING SUMMARY COMMANDS
+                data["endpoints"] = [c for c in a2j.summary_commands() if c not in commands]
+
+            elif method == "match":
+                # FILL ENDPOINTS WITH MISSING MATCH COMMANDS
+                data["endpoints"] = [c for c in a2j.match_commands() if c not in commands]
 
         else:
             data["endpoints"] = []

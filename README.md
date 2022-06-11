@@ -1,6 +1,6 @@
 # Deasilsoft/a2j
 
-A Restful JSON API for analyzing Age of Empires II records.
+A Restful JSON API as a service for analyzing Age of Empires II records.
 
 [![Code Tests](https://img.shields.io/github/workflow/status/deasilsoft/a2j/Run%20a2j%20Tests?label=pytest&logo=pytest&logoWidth=18)](https://github.com/Deasilsoft/a2j/actions/workflows/tests.yaml)
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/deasilsoft/a2j?logo=codecov&logoWidth=18)](https://app.codecov.io/gh/Deasilsoft/a2j)
@@ -28,50 +28,53 @@ A Restful JSON API for analyzing Age of Empires II records.
 
 ### Direct Download & Docker Compose (Development)
 
-1. Clone deasilsoft/a2j from Github and open the project root directory:
-
-       git clone https://github.com/Deasilsoft/a2j.git
-       cd a2j
-
+1. Clone Deasilsoft/a2j and open the project directory with `git clone https://github.com/Deasilsoft/a2j.git && cd a2j`
 2. Make changes to **docker-compose.yml** as you desire.
+3. Run the Docker container(s) with `docker-compose up --build -d`
 
-3. Run the Docker container(s) with:
+#### Tips & Tricks for Development
 
-       docker compose up --build -d
+* `python ./tests/data/prettier.py` to prettify `match.json` and `summary.json`.
+* Run tests locally with `docker-compose exec -T development pytest --cov=src --cov-report=xml tests`
 
 ### Using Only Docker (Production)
 
-1. Pull the image from Docker Hub.
-
-       docker pull deasilsoft/a2j:latest
-
-2. Run the Docker container.
-
-       docker run -d --name a2j -v ABSOLUTE_PATH_TO_RECORDS:/home/a2j/records --restart always deasilsoft/a2j:latest
+1. Pull the image from Docker Hub with `docker pull deasilsoft/a2j:latest`
+2. Run the Docker container with `docker run -d --name a2j -v ABSOLUTE_PATH_TO_RECORDS:/home/a2j/records --restart always deasilsoft/a2j:latest`
 
 *Remember to replace **ABSOLUTE_PATH_TO_RECORDS** with your own value.*
 
-Read more about the [`docker run`](https://docs.docker.com/engine/reference/commandline/run/) syntax.
+Read more about the [docker run syntax](https://docs.docker.com/engine/reference/commandline/run/).
 
 ---
 
 ## Usage
 
-This is a Restful API running in a Docker container **behind your secure firewall**. You can add more record files from the host by placing them inside the directory
-named `records` in your project root. The purpose of the API is to easily and efficiently retrieve the data you want from an Age of Empires II record file. The output data is JSON,
-which is easy to handle in any programming language.
+This is a Restful API running in a Docker container preferably **behind your secure firewall** (security requirement). This service should not be accessible from `localhost:5000`
+(or any other port). This is built as a service specifically to make it possible to be used with any tech stack, in particular websites not necessarily running with Python. This
+service is perfect for websites built with PHP.
+
+You can add more record files from the host by placing the record files inside the directory named `records` in the project directory. The purpose of the API is to easily and
+efficiently retrieve the data you want from an Age of Empires II record file. The output data is JSON, which is easy to handle in any programming language. The JSON data is cached
+to increase speed and reduce usage of your valuable computing power.
 
 ### Endpoints
 
+Path and query parameters within `<>` or `[]` brackets are dynamic values. `<>` are required, and `[]` are optional. Optional values have default values, which are given after
+the `|` separator. ***Example** `[optional=foo,bar|bar]` allows `foo` and `bar` as valid values, but `bar` is the default value if no value is supplied.*
+
     container_name:5000/
     container_name:5000/minimap/<record>/?[scale=1-15|5]
-    container_name:5000/record/<record>/<commands...>/
+    container_name:5000/record/<record>/<commands...>/?[method=summary,match|summary]
 
-Whenever you get a list of `endpoints` from a request, you can add one of them at the end of your current path.
+Whenever you get a list of `endpoints` from a request, you can add one of them at the end of your current path (before query parameters).
 
 ---
 
 ## Examples
+
+Below are some examples of usage. These examples use `curl` as a tool to send requests, any other means of sending requests will work as well. `container_name` is an example name
+of the Docker container running Deasilsoft/a2j. We strongly recommend naming the container a2j and **NOT** publishing the port.
 
 ### GET
 
@@ -80,6 +83,10 @@ Whenever you get a list of `endpoints` from a request, you can add one of them a
 This example will retrieve a JSON object of all the `teams` and `players` from the `test.mgz` record.
 
     curl container_name:5000/record/test.mgz/teams/players/
+
+This example will retrieve a JSON object of all the `actions` from the `test.mgz` record.
+
+    curl container_name:5000/record/test.mgz/actions/?method=match
 
 #### Minimap
 
@@ -91,12 +98,12 @@ This example will retrieve a PNG image with our interpretation of the Age of Emp
 
 #### Cached Data
 
-To delete all **cached data** from a `record` you can do the following.
+To delete all *cached data* from a record file you can do the following.
 
     curl -X DELETE container_name:5000/record/test.mgz/
 
-This is useful in cases where you replace a `record` and want to generate a new cache, or for a general cleanup. Generally, you don't want to remove cached data unless the `record`
-has changed.
+This is useful in cases where you replace a record file and want to generate a new cache for it. Generally, you don't want to remove cached data unless the record file has been
+replaced with a new record file.
 
 ---
 
