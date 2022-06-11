@@ -74,7 +74,7 @@ def routes(app: Flask, start_time: float, version: str):
         """
 
         # GET RECORD
-        record = path.split("/")[0]
+        record = str(path.split("/")[0])
 
         # IF RECORD EXISTS
         if util.is_record(record):
@@ -119,7 +119,7 @@ def routes(app: Flask, start_time: float, version: str):
         """
 
         # GET RECORD
-        record = path.split("/")[0]
+        record = str(path.split("/")[0])
 
         # SPLIT COMMANDS
         commands = path.split("/")[1:]
