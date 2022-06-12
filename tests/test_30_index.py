@@ -54,4 +54,4 @@ class TestIndex(unittest.TestCase):
         assert data["version"] == a2j.get_version()
         assert isinstance(data["uptime"], float)
         assert data["environment"] == os.getenv("FLASK_ENV")
-        assert data["endpoints"] == ["record"]
+        assert data["endpoints"] == ["record", "minimap"]
