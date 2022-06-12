@@ -102,14 +102,14 @@ class TestErrors(unittest.TestCase):
     def test_corrupt_record_summary(self):
         path = "/record/corrupt.aoe2record/players/"
         errno = 2
-        message = "Parsing AoE2 record stopped with this error: invalid mgz file: could not read enough bytes, expected 1920102207, found 8"
+        message = "Parsing record error: invalid mgz file: could not read enough bytes, expected 1920102207, found 8"
 
         self._test_error(path, errno, message, self.client.get)
 
     def test_corrupt_record_match(self):
         path = "/record/corrupt.aoe2record/players/?method=match"
         errno = 2
-        message = "Parsing AoE2 record stopped with this error: could not parse"
+        message = "Parsing record error: could not parse"
 
         self._test_error(path, errno, message, self.client.get)
 
