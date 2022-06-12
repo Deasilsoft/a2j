@@ -22,36 +22,71 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import time
-import unittest
 
-from flask import Flask
-
-from ..src.routes import routes
-
-
-class TestCache(unittest.TestCase):
+def no_record_error(message: str):
     """
-    Test data caching.
+    Record does not exist error.
+
+    :param message:
+    :return:
+    """
+    return {
+        "message": "Record does not exist: " + message,
+        "errno": 0,
+    }
+
+
+def invalid_commands_error(message: str):
+    """
+    Invalid commands error.
+
+    :param message:
+    :return:
     """
 
-    @classmethod
-    def setUpClass(cls):
-        """
-        Setup the testing environment.
-        """
+    return {
+        "message": "Invalid commands: " + message,
+        "errno": 1
+    }
 
-        # SETUP FLASK TEST ENVIRONMENT
-        app = Flask(__name__)
-        routes(app, time.time())
-        cls.client = app.test_client()
 
-    def test_clean(self):
-        data = self.client.delete("/record/test.mgz/").get_json()
+def parsing_record_error(message: str):
+    """
+    Parsing record error.
 
-        assert data["deleted"] == 1
+    :param message:
+    :return:
+    """
 
-    def test_clean_empty(self):
-        data = self.client.delete("/record/test.mgz/").get_json()
+    return {
+        "message": "Parsing record error: " + message,
+        "errno": 2
+    }
 
-        assert data["deleted"] == 0
+
+def no_commands_error():
+    """
+    No commands received error.
+
+    :param message:
+    :return:
+    """
+
+    return {
+        "message": "No commands received.",
+        "errno": 3
+    }
+
+
+def invalid_method_error(message: str):
+    """
+    Invalid method error.
+
+    :param message:
+    :return:
+    """
+
+    return {
+        "message": "Invalid method: " + message,
+        "errno": 4
+    }

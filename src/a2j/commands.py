@@ -21,12 +21,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-from typing import List
+from typing import Dict, List
 
 from mgz.summary import FullSummary
 
 
-def match_commands() -> List[str]:
+def get_match_commands() -> List[str]:
     """
     :return: List with available match commands.
     :rtype: List[str]
@@ -82,7 +82,7 @@ def match_commands() -> List[str]:
     ]
 
 
-def summary_commands() -> dict:
+def get_summary_commands() -> Dict[str, callable]:
     """
     :return: Dict with available summary commands.
     :rtype: dict
@@ -124,7 +124,7 @@ def summary_commands() -> dict:
     }
 
 
-def __get_restored(summary: FullSummary) -> dict:
+def __get_restored(summary: FullSummary) -> Dict[str, any]:
     """
     :return: Objectified restored array from record.
     :rtype: dict
@@ -138,7 +138,7 @@ def __get_restored(summary: FullSummary) -> dict:
     }
 
 
-def __get_version(summary: FullSummary) -> dict:
+def __get_version(summary: FullSummary) -> Dict[str, any]:
     """
     :return: Objectified version array from record.
     :rtype: dict

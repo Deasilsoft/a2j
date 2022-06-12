@@ -29,11 +29,10 @@ from io import BytesIO
 
 from flask import Flask, request, Response, send_file
 
-from . import a2j
-from .a2j import cache, encoder, minimap, util
+from .a2j import create_minimap, delete_cache, get_match_commands, get_summary_commands, get_version, handle_record, is_record, JSONEncoder, no_record_error, parse_record
 
 
-def routes(app: Flask, start_time: float, version: str):
+def routes(app: Flask, start_time: float):
     """
     Get all a2j routes.
 
@@ -53,7 +52,7 @@ def routes(app: Flask, start_time: float, version: str):
         """
 
         return Response(json.dumps({
-            "version": version,
+            "version": get_version(),
             "uptime": time.time() - start_time,
             "environment": os.getenv("FLASK_ENV"),
             "endpoints": ["record", "minimap"]
@@ -74,10 +73,10 @@ def routes(app: Flask, start_time: float, version: str):
         """
 
         # GET RECORD
-        record = path.split("/")[0]
+        record = handle_record(path.split("/")[0])
 
         # IF RECORD EXISTS
-        if record != "" and util.is_record(record):
+        if record != "" and is_record(record):
 
             # SET SCALE FROM USER-INPUT
             if "scale" in request.args and request.args.get("scale").isdigit():
@@ -91,7 +90,7 @@ def routes(app: Flask, start_time: float, version: str):
             img = BytesIO()
 
             # CREATE MINIMAP IMAGE
-            minimap.create(record, scale).save(img, "PNG", quality=100)
+            create_minimap(record, scale).save(img, "PNG", quality=100)
 
             img.seek(0)
 
@@ -99,10 +98,7 @@ def routes(app: Flask, start_time: float, version: str):
 
         # OTHERWISE: OUTPUT ERROR
         return Response(json.dumps({
-            "errors": [{
-                "message": "Record does not exist: " + str(util.get_record(record)),
-                "errno": 0,
-            }]
+            "errors": [no_record_error(record)]
         }), mimetype="application/json")
 
     @app.route("/record", methods=["GET"])
@@ -120,7 +116,7 @@ def routes(app: Flask, start_time: float, version: str):
         """
 
         # GET RECORD
-        record = path.split("/")[0]
+        record = handle_record(path.split("/")[0])
 
         # FILTER EMPTY COMMANDS
         commands = [c for c in path.split("/")[1:] if c != ""]
@@ -134,24 +130,24 @@ def routes(app: Flask, start_time: float, version: str):
             method = "summary"
 
         # PARSE DATA
-        data = a2j.parse(record, commands, method)
+        data = parse_record(record, commands, method)
 
         # NOT ALL
         if "all" not in commands:
 
             # FILL ENDPOINTS WITH MISSING SUMMARY COMMANDS
             if method == "summary":
-                data["endpoints"] = [c for c in a2j.summary_commands() if c not in commands]
+                data["endpoints"] = [c for c in get_summary_commands() if c not in commands]
 
             # FILL ENDPOINTS WITH MISSING MATCH COMMANDS
             elif method == "match":
-                data["endpoints"] = [c for c in a2j.match_commands() if c not in commands]
+                data["endpoints"] = [c for c in get_match_commands() if c not in commands]
 
         # IS ALL
         else:
             data["endpoints"] = []
 
-        return Response(json.dumps(data, cls=encoder.JSONEncoder), mimetype="application/json")
+        return Response(json.dumps(data, cls=JSONEncoder), mimetype="application/json")
 
     @app.route("/record", methods=["DELETE"])
     @app.route("/record/", methods=["DELETE"])
@@ -168,18 +164,15 @@ def routes(app: Flask, start_time: float, version: str):
         """
 
         # GET RECORD
-        record = path.split("/")[0]
+        record = handle_record(path.split("/")[0])
 
         # IF RECORD EXISTS
-        if record != "" and util.is_record(record):
+        if record != "" and is_record(record):
             return Response(json.dumps({
-                "deleted": cache.delete(record)
+                "deleted": delete_cache(record)
             }), mimetype="application/json")
 
         # OTHERWISE: OUTPUT ERROR
         return Response(json.dumps({
-            "errors": [{
-                "message": "Record does not exist: " + str(util.get_record(record)),
-                "errno": 0,
-            }]
+            "errors": [no_record_error(record)]
         }), mimetype="application/json")

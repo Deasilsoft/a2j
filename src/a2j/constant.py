@@ -22,36 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import time
-import unittest
+from pathlib import Path
 
-from flask import Flask
-
-from ..src.routes import routes
-
-
-class TestCache(unittest.TestCase):
-    """
-    Test data caching.
-    """
-
-    @classmethod
-    def setUpClass(cls):
-        """
-        Setup the testing environment.
-        """
-
-        # SETUP FLASK TEST ENVIRONMENT
-        app = Flask(__name__)
-        routes(app, time.time())
-        cls.client = app.test_client()
-
-    def test_clean(self):
-        data = self.client.delete("/record/test.mgz/").get_json()
-
-        assert data["deleted"] == 1
-
-    def test_clean_empty(self):
-        data = self.client.delete("/record/test.mgz/").get_json()
-
-        assert data["deleted"] == 0
+RECORD_DIRECTORY = Path.cwd() / "records"
+CACHE_DIRECTORY = Path.cwd() / "cache"
+METHODS = ["summary", "match"]

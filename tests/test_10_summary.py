@@ -29,7 +29,6 @@ from pathlib import Path
 
 from flask import Flask
 
-from ..src import a2j
 from ..src.routes import routes
 
 
@@ -46,7 +45,7 @@ class TestA2J(unittest.TestCase):
 
         # SETUP FLASK TEST ENVIRONMENT
         app = Flask(__name__)
-        routes(app, time.time(), a2j.get_version())
+        routes(app, time.time())
         client = app.test_client()
 
         # CLEAR CACHE BEFORE TESTING

@@ -21,16 +21,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-
-import re
-import urllib.parse
+from os.path import abspath, commonpath, normpath
 from pathlib import Path
 from typing import List
+from urllib.parse import unquote_plus
 
-from .commands import match_commands, summary_commands
+from .commands import get_match_commands, get_summary_commands
+from .constant import METHODS, RECORD_DIRECTORY
 
 
-def validate_commands(command_list: List[str], method: str) -> bool:
+def is_valid_command(command_list: List[str], method: str) -> bool:
     """
     Is the list of user-supplied commands valid?
 
@@ -39,10 +39,10 @@ def validate_commands(command_list: List[str], method: str) -> bool:
     :return: bool
     """
 
-    return not invalid_commands(command_list, method)
+    return not get_invalid_commands(command_list, method)
 
 
-def validate_method(method: str) -> bool:
+def is_valid_method(method: str) -> bool:
     """
     Is the user-supplied method valid?
 
@@ -50,32 +50,27 @@ def validate_method(method: str) -> bool:
     :return: bool
     """
 
-    return method in ["summary", "match"]
+    return method in METHODS
 
 
-def valid_summary_commands(command_list: List[str]) -> List[str]:
+def get_valid_commands(command_list: List[str], method: str) -> List[str]:
     """
     Get list of valid summary commands from list of commands.
 
     :param (list) command_list: User-supplied commands.
+    :param (str) method: User-supplied method.
     :return:
     """
 
-    return [command for command in command_list if command in summary_commands()]
+    commands = {
+        "summary": get_summary_commands,
+        "match": get_match_commands,
+    }
+
+    return [command for command in command_list if command in commands.get(method)()]
 
 
-def valid_match_commands(command_list: List[str]) -> List[str]:
-    """
-    Get list of valid match commands from list of commands.
-
-    :param (list) command_list: User-supplied commands.
-    :return:
-    """
-
-    return [command for command in command_list if command in match_commands()]
-
-
-def invalid_commands(command_list: List[str], method: str) -> List[str]:
+def get_invalid_commands(command_list: List[str], method: str) -> List[str]:
     """
     Get list of invalid commands from list of commands.
 
@@ -85,32 +80,76 @@ def invalid_commands(command_list: List[str], method: str) -> List[str]:
     """
 
     commands = {
-        "summary": summary_commands,
-        "match": match_commands,
+        "summary": get_summary_commands,
+        "match": get_match_commands,
     }
 
     return [command for command in command_list if command not in commands.get(method)()]
 
 
-def is_record(path: str) -> bool:
+def handle_record(filename: str) -> str:
+    """
+    Handle filename of record file.
+
+    :param (str) filename: User-supplied filename.
+    :return: Handles record filename.
+    """
+
+    # Handle special URL characters
+    filename = unquote_plus(filename)
+
+    # Handle path normalization
+    filename = normpath(filename)
+
+    return filename
+
+
+def is_record(filename: str) -> bool:
     """
     Is filename a record file?
 
-    :param (str) path: User-supplied filename.
+    :param (str) filename: User-supplied filename.
     :return: True if filename is valid record file; otherwise False.
     :rtype: bool
     """
 
-    return re.search(r"^\.+|\\|/", urllib.parse.unquote_plus(path)) is None and get_record(path).exists()
+    # Validate path
+    if str(RECORD_DIRECTORY) != commonpath((str(RECORD_DIRECTORY), abspath(str(get_record_path(filename))))):
+        return False
+
+    # Validate file existence
+    if not get_record_path(filename).exists():
+        return False
+
+    return True
 
 
-def get_record(path: str) -> Path:
+def get_record_path(filename: str) -> Path:
     """
     Get record file path by filename.
 
-    :param path: User-supplied filename.
+    :param (str) filename: User-supplied filename.
     :return: User-supplied record file.
     :rtype: str
     """
 
-    return Path.cwd() / "records" / path
+    return RECORD_DIRECTORY / filename
+
+
+def get_version() -> str:
+    """
+    Get the version of a2j.
+
+    :return:  Version of a2j.
+    :rtype: str
+    """
+
+    # OPEN VERSION FILE
+    with open(Path.cwd() / "VERSION", "r") as file:
+        # READ VERSION FROM FILE
+        version = file.read().strip()
+
+        # CLOSE FILE
+        file.close()
+
+    return version

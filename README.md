@@ -111,6 +111,16 @@ replaced with a new record file.
 
 ---
 
+## TODOs
+
+| Task                              | Priority |
+|:----------------------------------|:--------:|
+| Create Record as an object.       |  Medium  |
+| Create Minimap as a builder.      |  Medium  |
+| Create RecordParser as a builder. |  Medium  |
+
+---
+
 ## Credits
 
 * Thanks to [@happyleavesaoc](https://github.com/happyleavesaoc) for maintaining [aoc-mgz](https://github.com/happyleavesaoc/aoc-mgz) and for answering my questions on Discord.

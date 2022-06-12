@@ -26,13 +26,12 @@ import time
 
 from flask import Flask
 
-from . import a2j
 from .routes import routes
 
 # GET FLASK
 app = Flask(__name__)
 
 # BIND ROUTES
-routes(app, time.time(), a2j.get_version())
+routes(app, time.time())
 
 status = True

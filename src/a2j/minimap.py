@@ -25,10 +25,10 @@ SOFTWARE.
 from PIL import Image
 from PIL.Image import Resampling
 
-from . import parse
+from .parser import parse_record
 
 
-def create(record: str, scale: int) -> Image:
+def create_minimap(record: str, scale: int) -> Image:
     """
     Create the minimap image from record.
 
@@ -39,7 +39,7 @@ def create(record: str, scale: int) -> Image:
     """
 
     # GET DATA FROM RECORD
-    data = parse(record, ["map", "objects"])
+    data = parse_record(record, ["map", "objects"])
 
     # DIMENSIONS OF MAP
     dimension = data["map"]["dimension"]
@@ -53,7 +53,7 @@ def create(record: str, scale: int) -> Image:
         tx, ty, tid, height = tile["x"], tile["y"], tile["terrain_id"], tile["elevation"]
 
         # DRAW ON IMAGE OBJECT
-        img.putpixel((tx, ty), colors_terrain()[tid][0 if height < 3 else 1 if height < 5 else 2])
+        img.putpixel((tx, ty), get_minimap_terrain_colors()[tid][0 if height < 3 else 1 if height < 5 else 2])
 
     # DRAW OBJECTS
     for obj in data["objects"]["objects"]:
@@ -62,11 +62,11 @@ def create(record: str, scale: int) -> Image:
 
         # OBJECT OWNED BY PLAYER
         if pid is not None:
-            img.putpixel((ox, oy), colors_players()[pid])
+            img.putpixel((ox, oy), get_minimap_player_colors()[pid])
 
         # OTHER OBJECTS
-        elif oid in colors_objects():
-            img.putpixel((ox, oy), colors_objects()[oid])
+        elif oid in get_minimap_object_colors():
+            img.putpixel((ox, oy), get_minimap_object_colors()[oid])
 
     # UPSCALE IMAGE
     img = img.resize((min(max(scale, 1), 15) * dimension, min(max(scale, 1), 15) * dimension), Resampling.NEAREST)
@@ -74,7 +74,7 @@ def create(record: str, scale: int) -> Image:
     return img
 
 
-def colors_objects() -> dict:
+def get_minimap_object_colors() -> dict:
     """
     Age of Empires II object colors for minimap.
 
@@ -120,7 +120,7 @@ def colors_objects() -> dict:
     }
 
 
-def colors_players() -> dict:
+def get_minimap_player_colors() -> dict:
     """
     Age of Empires II player colors for minimap.
 
@@ -180,7 +180,7 @@ def colors_players() -> dict:
     }
 
 
-def colors_terrain() -> dict:
+def get_minimap_terrain_colors() -> dict:
     """
     Age of Empires II terrain colors for minimap.
 

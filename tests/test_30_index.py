@@ -28,7 +28,7 @@ import unittest
 
 from flask import Flask
 
-from ..src import a2j
+from ..src.a2j import get_version
 from ..src.routes import routes
 
 
@@ -45,13 +45,13 @@ class TestIndex(unittest.TestCase):
 
         # SETUP FLASK TEST ENVIRONMENT
         app = Flask(__name__)
-        routes(app, time.time(), a2j.get_version())
+        routes(app, time.time())
         cls.client = app.test_client()
 
     def test_index(self):
         data = self.client.get("/").get_json()
 
-        assert data["version"] == a2j.get_version()
+        assert data["version"] == get_version()
         assert isinstance(data["uptime"], float)
         assert data["environment"] == os.getenv("FLASK_ENV")
         assert data["endpoints"] == ["record", "minimap"]

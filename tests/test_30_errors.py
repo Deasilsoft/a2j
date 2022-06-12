@@ -27,7 +27,6 @@ import unittest
 
 from flask import Flask
 
-from ..src import a2j
 from ..src.routes import routes
 
 
@@ -44,34 +43,31 @@ class TestErrors(unittest.TestCase):
 
         # SETUP FLASK TEST ENVIRONMENT
         app = Flask(__name__)
-        routes(app, time.time(), a2j.get_version())
+        routes(app, time.time())
         cls.client = app.test_client()
 
     def test_record_does_not_exist(self):
         path = "/record/does-not-exist/not-tested/"
-        errno = 0
-        message = "Record does not exist: /home/a2j/records/does-not-exist"
 
-        self._test_error(path, errno, message, self.client.get)
+        self._test_error(path, 0, "Record does not exist: does-not-exist", self.client.get, 0, 2)
+        self._test_error(path, 1, "Invalid commands: ['not-tested']", self.client.get, 1, 2)
 
     def test_record_direct_path_injection(self):
         path = "/record/../injection.py/version/"
-        errno = 0
-        message = "Record does not exist: /home/a2j/records/.."
 
-        self._test_error(path, errno, message, self.client.get)
+        self._test_error(path, 0, "Record does not exist: ..", self.client.get, 0, 2)
+        self._test_error(path, 1, "Invalid commands: ['injection.py']", self.client.get, 1, 2)
 
     def test_record_traversal_encoding_path_injection(self):
         path = "/record/%2e%2e%2finjection.py/version/"
-        errno = 0
-        message = "Record does not exist: /home/a2j/records/.."
 
-        self._test_error(path, errno, message, self.client.get)
+        self._test_error(path, 0, "Record does not exist: ..", self.client.get, 0, 2)
+        self._test_error(path, 1, "Invalid commands: ['injection.py']", self.client.get, 1, 2)
 
     def test_record_deletion_failure(self):
         path = "/record/does-not-exist/"
         errno = 0
-        message = "Record does not exist: /home/a2j/records/does-not-exist"
+        message = "Record does not exist: does-not-exist"
 
         self._test_error(path, errno, message, self.client.delete)
 
@@ -92,7 +88,7 @@ class TestErrors(unittest.TestCase):
     def test_minimap_does_not_exist(self):
         path = "/minimap/does-not-exist/not-tested/"
         errno = 0
-        message = "Record does not exist: /home/a2j/records/does-not-exist"
+        message = "Record does not exist: does-not-exist"
 
         self._test_error(path, errno, message, self.client.get)
 
@@ -118,9 +114,9 @@ class TestErrors(unittest.TestCase):
         self._test_error(path, errno, message, self.client.get)
 
     @staticmethod
-    def _test_error(path: str, errno: int, message: str, function: callable):
+    def _test_error(path: str, errno: int, message: str, function: callable, index: int = 0, length: int = 1):
         data = function(path).get_json()
 
-        assert len(data["errors"]) == 1
-        assert data["errors"][0]["errno"] == errno
-        assert data["errors"][0]["message"] == message
+        assert len(data["errors"]) == length
+        assert data["errors"][index]["errno"] == errno
+        assert data["errors"][index]["message"] == message

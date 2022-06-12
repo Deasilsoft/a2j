@@ -25,10 +25,11 @@ SOFTWARE.
 import json
 from pathlib import Path
 
-from . import encoder
+from .constant import CACHE_DIRECTORY
+from .encoder import JSONEncoder
 
 
-def create(record: str, commands: list, method: str, data: dict):
+def create_cache(record: str, commands: list, method: str, data: dict):
     """
     Put JSON object in cache.
 
@@ -38,18 +39,18 @@ def create(record: str, commands: list, method: str, data: dict):
     :param (dict) data: JSON object.
     """
 
-    cache_file = get_path(record, commands, method)
+    cache_file = get_cache_path(record, commands, method)
 
     # CREATE MISSING DIRECTORIES
     cache_file.parent.mkdir(parents=True, exist_ok=True)
 
     # DUMP JSON OBJECT INTO FILE
     with cache_file.open(mode="w") as file:
-        json.dump(data, file, cls=encoder.JSONEncoder)
+        json.dump(data, file, cls=JSONEncoder)
         file.close()
 
 
-def read(record: str, commands: list, method: str) -> (dict, bool):
+def read_cache(record: str, commands: list, method: str) -> (dict, bool):
     """
     Get JSON object from cache.
 
@@ -62,7 +63,7 @@ def read(record: str, commands: list, method: str) -> (dict, bool):
 
     cached_data = {}
     is_cached = False
-    cache_file = get_path(record, commands, method)
+    cache_file = get_cache_path(record, commands, method)
 
     if cache_file.exists():
         # IS CACHED
@@ -76,7 +77,7 @@ def read(record: str, commands: list, method: str) -> (dict, bool):
     return cached_data, is_cached
 
 
-def delete(record: str) -> int:
+def delete_cache(record: str) -> int:
     """
     Clean up all cached data related to record.
 
@@ -87,14 +88,14 @@ def delete(record: str) -> int:
 
     counter = 0
 
-    for file in get_root().rglob(record):
+    for file in CACHE_DIRECTORY.rglob(record):
         file.unlink()
         counter += 1
 
     return counter
 
 
-def get_path(record: str, commands: list, method: str) -> Path:
+def get_cache_path(record: str, commands: list, method: str) -> Path:
     """
     Get path to cache file with data.
 
@@ -107,14 +108,4 @@ def get_path(record: str, commands: list, method: str) -> Path:
 
     commands.sort()
 
-    return get_root().joinpath(method).joinpath(*commands) / record
-
-
-def get_root() -> Path:
-    """
-    Get cache root path.
-
-    :return: Cache root path.
-    """
-
-    return Path.cwd() / "cache"
+    return CACHE_DIRECTORY.joinpath(method).joinpath(*commands) / record
