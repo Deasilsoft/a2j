@@ -55,7 +55,7 @@ def parse(record: str, command_list: List[str], method: str = "summary") -> dict
         command_list = ["all"]
 
     # CHECK IF USER-SUPPLIED RECORD IS VALID
-    if not util.is_record(record):
+    if record == "" or not util.is_record(record):
         data["errors"].append({
             "message": "Record does not exist: " + str(util.get_record(record)),
             "errno": 0,
@@ -139,12 +139,12 @@ def parse(record: str, command_list: List[str], method: str = "summary") -> dict
                         if "all" in command_list:
                             for command in match_commands():
                                 if command != "all":
-                                    data[command] = match.__getattribute__(command)
+                                    data[command] = getattr(match, command)
 
                         # HANDLE MATCH COMMANDS
                         else:
                             for command in util.valid_match_commands(command_list):
-                                data[command] = match.__getattribute__(command)
+                                data[command] = getattr(match, command)
 
                 file.close()
 

@@ -56,7 +56,7 @@ def routes(app: Flask, start_time: float, version: str):
             "version": version,
             "uptime": time.time() - start_time,
             "environment": os.getenv("FLASK_ENV"),
-            "endpoints": ["record"]
+            "endpoints": ["record", "minimap"]
         }), mimetype="application/json")
 
     @app.route("/minimap", methods=["GET"])
@@ -74,17 +74,18 @@ def routes(app: Flask, start_time: float, version: str):
         """
 
         # GET RECORD
-        record = str(path.split("/")[0])
+        record = path.split("/")[0]
 
         # IF RECORD EXISTS
-        if util.is_record(record):
-
-            # MINIMAP SCALE
-            scale = 5
+        if record != "" and util.is_record(record):
 
             # SET SCALE FROM USER-INPUT
             if "scale" in request.args and request.args.get("scale").isdigit():
                 scale = int(request.args.get("scale"))
+
+            # DEFAULT SCALE
+            else:
+                scale = 5
 
             # PREPARE IMAGE
             img = BytesIO()
@@ -119,33 +120,34 @@ def routes(app: Flask, start_time: float, version: str):
         """
 
         # GET RECORD
-        record = str(path.split("/")[0])
-
-        # SPLIT COMMANDS
-        commands = path.split("/")[1:]
+        record = path.split("/")[0]
 
         # FILTER EMPTY COMMANDS
-        commands = list(filter(lambda command: command != "", commands))
-
-        # PARSE METHOD
-        method = "summary"
+        commands = [c for c in path.split("/")[1:] if c != ""]
 
         # SET PARSE METHOD FROM USER-INPUT
         if "method" in request.args and request.args.get("method").isalpha():
             method = str(request.args.get("method"))
 
+        # DEFAULT PARSE METHOD
+        else:
+            method = "summary"
+
         # PARSE DATA
         data = a2j.parse(record, commands, method)
 
+        # NOT ALL
         if "all" not in commands:
+
+            # FILL ENDPOINTS WITH MISSING SUMMARY COMMANDS
             if method == "summary":
-                # FILL ENDPOINTS WITH MISSING SUMMARY COMMANDS
                 data["endpoints"] = [c for c in a2j.summary_commands() if c not in commands]
 
+            # FILL ENDPOINTS WITH MISSING MATCH COMMANDS
             elif method == "match":
-                # FILL ENDPOINTS WITH MISSING MATCH COMMANDS
                 data["endpoints"] = [c for c in a2j.match_commands() if c not in commands]
 
+        # IS ALL
         else:
             data["endpoints"] = []
 
@@ -166,10 +168,10 @@ def routes(app: Flask, start_time: float, version: str):
         """
 
         # GET RECORD
-        record = str(path.split("/")[0])
+        record = path.split("/")[0]
 
         # IF RECORD EXISTS
-        if util.is_record(record):
+        if record != "" and util.is_record(record):
             return Response(json.dumps({
                 "deleted": cache.delete(record)
             }), mimetype="application/json")
