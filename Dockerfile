@@ -58,4 +58,4 @@ EXPOSE 5000
 HEALTHCHECK CMD curl --fail http://localhost:5000 || exit 1
 
 # RUN A2J APP
-CMD flask run --host=0.0.0.0
+ENTRYPOINT flask run --host=0.0.0.0
