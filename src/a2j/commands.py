@@ -144,11 +144,12 @@ def __get_version(summary: FullSummary) -> Dict[str, any]:
     :rtype: dict
     """
 
-    recanalyst_version, game_version, save_version, log_version = summary.get_version()
+    recanalyst_version, game_version, save_version, log_version, build = summary.get_version()
 
     return {
         "recanalyst": recanalyst_version,
         "game": game_version,
         "save": save_version,
         "log": log_version,
+        "build": build,
     }
