@@ -64,6 +64,7 @@
     "custom": false,
     "dimension": 120,
     "id": 9,
+    "mod_id": null,
     "modes": {
       "direct_placement": false,
       "effect_quantity": false,
@@ -87632,12 +87633,15 @@
   },
   "owner": 2,
   "platform": {
+    "allow_specs": null,
     "ladder": "Match Stats Only",
     "lobby_name": null,
     "platform_id": "voobly",
     "platform_match_id": null,
+    "private": null,
     "rated": false,
-    "ratings": {}
+    "ratings": {},
+    "spec_delay": null
   },
   "players": [
     {
@@ -87684,6 +87688,7 @@
       "civilization": 21,
       "color_id": 3,
       "human": true,
+      "id": 0,
       "mvp": false,
       "name": "Rammyy",
       "number": 1,
@@ -87694,6 +87699,7 @@
       "prefer_random": null,
       "rate_snapshot": null,
       "score": 8691,
+      "team_id": -1,
       "user_id": null,
       "winner": false
     },
@@ -87741,6 +87747,7 @@
       "civilization": 3,
       "color_id": 0,
       "human": true,
+      "id": 1,
       "mvp": true,
       "name": "[Magio]Ponguta_",
       "number": 2,
@@ -87751,6 +87758,7 @@
       "prefer_random": null,
       "rate_snapshot": null,
       "score": 10992,
+      "team_id": 2,
       "user_id": null,
       "winner": true
     }
@@ -87927,6 +87935,7 @@
       null,
       null
     ],
+    "hidden_civs": null,
     "lock_speed": true,
     "lock_teams": true,
     "map_reveal_choice": [
@@ -87968,6 +87977,7 @@
     ]
   ],
   "version": {
+    "build": null,
     "game": "VER 9.F",
     "log": 4,
     "recanalyst": {

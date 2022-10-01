@@ -109,7 +109,7 @@ class TestErrors(unittest.TestCase):
     def test_corrupt_record_match(self):
         path = "/record/corrupt.aoe2record/players/?method=match"
         errno = 2
-        message = "Parsing record error: could not parse"
+        message = "Parsing record error: could not parse: Error -3 while decompressing data: invalid block type"
 
         self._test_error(path, errno, message, self.client.get)
 
