@@ -1,6 +1,11 @@
 name: Run a2j Tests
+
 on:
   push:
+  pull_request:
+  schedule:
+    - cron: "47 10 * * 5"
+
 jobs:
   main:
     environment: CODECOV

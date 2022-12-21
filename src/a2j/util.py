@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-from os.path import abspath, commonpath, normpath
+from os.path import commonpath, normpath, realpath
 from pathlib import Path
 from typing import List
 from urllib.parse import unquote_plus
@@ -114,7 +114,7 @@ def is_record(filename: str) -> bool:
     """
 
     # Validate path
-    if str(RECORD_DIRECTORY) != commonpath((str(RECORD_DIRECTORY), abspath(str(get_record_path(filename))))):
+    if str(RECORD_DIRECTORY) != commonpath((str(RECORD_DIRECTORY), realpath(str(get_record_path(filename))))):
         return False
 
     # Validate file existence
