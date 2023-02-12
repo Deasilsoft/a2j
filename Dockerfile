@@ -17,7 +17,9 @@ RUN apk --no-cache add build-base \
                        fribidi-dev \
                        libimagequant-dev \
                        libxcb-dev \
-                       libpng-dev
+                       libpng-dev \
+                       openssl \
+                       pkgconf
 
 # CREATE AND SET GROUP, USER AND WORK DIRECTORY
 ENV GROUP=a2j
