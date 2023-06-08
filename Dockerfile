@@ -1,5 +1,5 @@
 # BUILD FROM PYTHON:ALPINE
-FROM python:alpine
+FROM python:3-alpine3.18
 
 # INSTALL PREREQUISITES TO PYTHON DEPENDENCIES
 RUN apk --no-cache add build-base \
