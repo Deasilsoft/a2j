@@ -1,3 +1,3 @@
-flask==2.2.2
-mgz==1.8.1
-pillow==9.3.0
+flask==2.2.3
+mgz==1.8.12
+pillow==9.5.0
