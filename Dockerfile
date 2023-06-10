@@ -4,11 +4,9 @@ LABEL version="2023.06"
 LABEL description="Deasilsoft/a2j"
 LABEL maintainer="Sondre Benjamin Aasen"
 
-# setup timezone
 ENV TZ=UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# install dependencies
 RUN apk --no-cache add \
     build-base \
     curl \
@@ -29,34 +27,35 @@ RUN apk --no-cache add \
     tk-dev \
     zlib-dev
 
-# setup user, group, and home directory
+ARG ENV
+
 ENV GROUP=a2j \
     USER=a2j \
-    HOME=/home/a2j
+    ENV=${ENV} \
+    HOME=/home/a2j \
+    FLASK_DEBUG=0
+
+ENV VENV=${HOME}/venv
+ENV PATH="${VENV}/bin:${PATH}"
+ENV FLASK_APP=${HOME}/src/app.py
+
+RUN if [ "${ENV}" = "development" ]; then \
+        export FLASK_DEBUG=1; \
+    fi
 
 RUN addgroup -S ${GROUP} && adduser -S ${USER} -G ${GROUP} -h ${HOME}
+
 USER ${USER}
 WORKDIR ${HOME}
 
-# setup virtual environment
-ENV VENV=/home/a2j/venv
 RUN python -m venv ${VENV}
-ENV PATH="${VENV}/bin:${PATH}"
-
-# install python dependencies
-RUN pip install --no-cache-dir wheel
 COPY requirements requirements
-ARG ENV=production
-RUN pip install --no-cache-dir -r requirements/${ENV}.txt
+RUN ${VENV}/bin/pip install --no-cache-dir wheel && \
+    ${VENV}/bin/pip install --no-cache-dir -r requirements/${ENV}.txt
 
-# copy source code
 COPY --chown=${USER}:${GROUP} . .
 
-# set environment variables for flask
-ENV FLASK_APP=/home/a2j/src/app.py
-ENV FLASK_ENV=${ENV}
-
-# expose port, set healthcheck, and run flask
 EXPOSE 5000
+
 HEALTHCHECK CMD curl --fail http://localhost:5000 || exit 1
 CMD ["flask", "run", "--host=0.0.0.0"]

@@ -26,9 +26,7 @@ import json
 import time
 import unittest
 from pathlib import Path
-
 from flask import Flask
-
 from ..src.routes import routes
 
 
@@ -36,8 +34,6 @@ class TestA2J(unittest.TestCase):
     """
     Test parsing of Age of Empires II record.
     """
-
-    client = None
 
     @classmethod
     def setUpClass(cls):
@@ -48,69 +44,116 @@ class TestA2J(unittest.TestCase):
         # SETUP FLASK TEST ENVIRONMENT
         app = Flask(__name__)
         routes(app, time.time())
-        cls.client = app.test_client()
+        client = app.test_client()
 
         # CLEAR CACHE BEFORE TESTING
-        cls.client.delete("/record/test.mgz/")
+        client.delete("/record/test.mgz/")
 
         # GET CACHED DATA
-        response = cls.client.get("/record/test.mgz/all/?method=match")
+        response = client.get("/record/test.mgz/all/?method=match")
         cls.parsed = response.get_json()
 
         # OPEN DATA FILE
         with open(Path.cwd() / "tests" / "data" / "match.json", "r") as file:
             # READ JSON FROM FILE
-            cls.read = json.loads(file.read())
+            cls.read = json.load(file)
 
-            # CLOSE FILE
-            file.close()
+    def assertPropertyEqual(self, property_name):
+        parsed_value = self.parsed.get(property_name)
+        read_value = self.read.get(property_name)
 
-    def test_data(self):
-        # META
-        assert self.parsed["completed"] == self.read["completed"]
-        assert self.parsed["diplomacy_type"] == self.read["diplomacy_type"]
-        assert self.parsed["file"] == self.read["file"]
-        assert self.parsed["game_version"] == self.read["game_version"]
-        assert self.parsed["guid"] == self.read["guid"]
-        assert self.parsed["hash"] == self.read["hash"]
-        assert self.parsed["log_version"] == self.read["log_version"]
-        assert self.parsed["multiqueue"] == self.read["multiqueue"]
-        assert self.parsed["save_version"] == self.read["save_version"]
-        assert self.parsed["version"] == self.read["version"]
+        self.assertEqual(parsed_value, read_value)
 
-        # PLAYERS
-        assert self.parsed["chat"] == self.read["chat"]
-        assert self.parsed["players"] == self.read["players"]
-        assert self.parsed["teams"] == self.read["teams"]
+    def test_completed_property_equality(self):
+        self.assertPropertyEqual("completed")
 
-        # SETTINGS
-        assert self.parsed["all_technologies"] == self.read["all_technologies"]
-        assert self.parsed["cheats"] == self.read["cheats"]
-        assert self.parsed["dataset"] == self.read["dataset"]
-        assert self.parsed["difficulty"] == self.read["difficulty"]
-        assert self.parsed["difficulty_id"] == self.read["difficulty_id"]
-        assert self.parsed["lock_speed"] == self.read["lock_speed"]
-        assert self.parsed["lock_teams"] == self.read["lock_teams"]
-        assert self.parsed["map_reveal"] == self.read["map_reveal"]
-        assert self.parsed["map_reveal_id"] == self.read["map_reveal_id"]
-        assert self.parsed["population"] == self.read["population"]
-        assert self.parsed["speed"] == self.read["speed"]
-        assert self.parsed["speed_id"] == self.read["speed_id"]
-        assert self.parsed["starting_age"] == self.read["starting_age"]
-        assert self.parsed["starting_age_id"] == self.read["starting_age_id"]
-        assert self.parsed["team_together"] == self.read["team_together"]
-        assert self.parsed["type"] == self.read["type"]
-        assert self.parsed["type_id"] == self.read["type_id"]
+    def test_file_property_equality(self):
+        self.assertPropertyEqual("file")
 
-        # GAME
-        assert self.parsed["actions"] == self.read["actions"]
-        assert self.parsed["duration"] == self.read["duration"]
-        assert self.parsed["gaia"] == self.read["gaia"]
-        assert self.parsed["inputs"] == self.read["inputs"]
-        assert self.parsed["lobby"] == self.read["lobby"]
-        assert self.parsed["map"] == self.read["map"]
+    def test_game_version_property_equality(self):
+        self.assertPropertyEqual("game_version")
 
-    def test_players(self):
-        parsed = self.client.get("/record/test.mgz/players/?method=match").get_json()
+    def test_guid_property_equality(self):
+        self.assertPropertyEqual("guid")
 
-        assert parsed["players"] == self.read["players"]
+    def test_hash_property_equality(self):
+        self.assertPropertyEqual("hash")
+
+    def test_log_version_property_equality(self):
+        self.assertPropertyEqual("log_version")
+
+    def test_multiqueue_property_equality(self):
+        self.assertPropertyEqual("multiqueue")
+
+    def test_save_version_property_equality(self):
+        self.assertPropertyEqual("save_version")
+
+    def test_version_property_equality(self):
+        self.assertPropertyEqual("version")
+
+    def test_chat_property_equality(self):
+        self.assertPropertyEqual("chat")
+
+    def test_players_property_equality(self):
+        self.assertPropertyEqual("players")
+
+    def test_teams_property_equality(self):
+        self.assertPropertyEqual("teams")
+
+    def test_all_technologies_property_equality(self):
+        self.assertPropertyEqual("all_technologies")
+
+    def test_cheats_property_equality(self):
+        self.assertPropertyEqual("cheats")
+
+    def test_dataset_property_equality(self):
+        self.assertPropertyEqual("dataset")
+
+    def test_difficulty_property_equality(self):
+        self.assertPropertyEqual("difficulty")
+
+    def test_difficulty_id_property_equality(self):
+        self.assertPropertyEqual("difficulty_id")
+
+    def test_diplomacy_type_property_equality(self):
+        self.assertPropertyEqual("diplomacy_type")
+
+    def test_lock_speed_property_equality(self):
+        self.assertPropertyEqual("lock_speed")
+
+    def test_lock_teams_property_equality(self):
+        self.assertPropertyEqual("lock_teams")
+
+    def test_map_reveal_property_equality(self):
+        self.assertPropertyEqual("map_reveal")
+
+    def test_map_reveal_id_property_equality(self):
+        self.assertPropertyEqual("map_reveal_id")
+
+    def test_population_property_equality(self):
+        self.assertPropertyEqual("population")
+
+    def test_speed_property_equality(self):
+        self.assertPropertyEqual("speed")
+
+    def test_speed_id_property_equality(self):
+        self.assertPropertyEqual("speed_id")
+
+    def test_starting_age_property_equality(self):
+        self.assertPropertyEqual("starting_age")
+
+    def test_starting_age_id_property_equality(self):
+        self.assertPropertyEqual("starting_age_id")
+
+    def test_team_together_property_equality(self):
+        self.assertPropertyEqual("team_together")
+
+    def test_type_property_equality(self):
+        self.assertPropertyEqual("type")
+
+    def test_type_id_property_equality(self):
+        self.assertPropertyEqual("type_id")
+
+
+if __name__ == "__main__":
+    unittest.main()

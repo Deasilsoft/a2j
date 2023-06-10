@@ -23,7 +23,6 @@ SOFTWARE.
 """
 
 import unittest
-
 from ..src.app import app, status
 
 
@@ -37,3 +36,7 @@ class TestCache(unittest.TestCase):
 
     def test_status(self):
         assert status is True
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -24,13 +24,11 @@ SOFTWARE.
 
 import time
 import unittest
-
 from flask import Flask
-
 from ..src.routes import routes
 
 
-class TestIndex(unittest.TestCase):
+class TestMinimap(unittest.TestCase):
     """
     Test minimap.
     """
@@ -69,3 +67,7 @@ class TestIndex(unittest.TestCase):
 
         assert response.mimetype == "image/png"
         assert response.status_code == 200
+
+
+if __name__ == "__main__":
+    unittest.main()
