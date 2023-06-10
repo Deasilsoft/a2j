@@ -1,6 +1,9 @@
 name: Build and Push a2j to Docker Hub
+
 on:
   push:
+    branches: [ "main" ]
+
 jobs:
   main:
     environment: DOCKER
