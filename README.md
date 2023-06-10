@@ -4,9 +4,7 @@ A Restful JSON API as a service for analyzing Age of Empires II records.
 
 [![Code Tests](https://img.shields.io/github/workflow/status/deasilsoft/a2j/Run%20a2j%20Tests?label=pytest&logo=pytest&logoWidth=18)](https://github.com/Deasilsoft/a2j/actions/workflows/tests.yaml)
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/deasilsoft/a2j?logo=codecov&logoWidth=18)](https://app.codecov.io/gh/Deasilsoft/a2j)
-[![Codiga Score](https://api.codiga.io/project/25065/score/svg)](https://app.codiga.io/public/project/25065/a2j/dashboard)
-[![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/deasilsoft/a2j/main?label=CodeFactor&logo=codefactor&logoWidth=18)](https://www.codefactor.io/repository/github/deasilsoft/a2j)
-[![LGTM Alerts](https://img.shields.io/lgtm/alerts/github/Deasilsoft/a2j?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Deasilsoft/a2j/context:python)  
+[![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/deasilsoft/a2j/main?label=CodeFactor&logo=codefactor&logoWidth=18)](https://www.codefactor.io/repository/github/deasilsoft/a2j)  
 [![Docker Build](https://img.shields.io/github/workflow/status/deasilsoft/a2j/Build%20and%20Push%20a2j%20to%20Docker%20Hub?logo=docker&logoWidth=18)](https://github.com/Deasilsoft/a2j/actions/workflows/docker-hub.yaml)
 [![Docker Image Size](https://img.shields.io/docker/image-size/deasilsoft/a2j?logo=docker&logoWidth=18)](https://hub.docker.com/r/deasilsoft/a2j)
 [![Docker Pulls](https://img.shields.io/docker/pulls/deasilsoft/a2j?logo=docker&logoWidth=18)](https://hub.docker.com/r/deasilsoft/a2j)
@@ -113,11 +111,11 @@ replaced with a new record file.
 
 ## TODOs
 
-| Task                              | Priority |
-|:----------------------------------|:--------:|
-| Create Record as an object.       |  Medium  |
-| Create Minimap as a builder.      |  Medium  |
-| Create RecordParser as a builder. |  Medium  |
+| Task                                          | Priority |
+|:----------------------------------------------|:--------:|
+| Create Record as an object.                   |   Low    |
+| Create Minimap with the Builder pattern.      |   Low    |
+| Create RecordParser with the Builder pattern. |   Low    |
 
 ---
 
