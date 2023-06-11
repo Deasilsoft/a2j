@@ -24,7 +24,6 @@ SOFTWARE.
 
 import time
 import unittest
-import pytest
 from flask import Flask
 from ..src.routes import routes
 
