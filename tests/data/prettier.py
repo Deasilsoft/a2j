@@ -7,7 +7,7 @@ SUFFIX = ".json"
 
 def prettier(name: str):
     with open(Path(__file__).parent / (name + SUFFIX), "r") as file:
-        raw_json = json.loads(file.read())
+        raw_json = json.load(file)
 
     with open(Path(__file__).parent / (PREFIX + name + SUFFIX), "w") as file:
         pretty_json = json.dumps(
