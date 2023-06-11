@@ -24,9 +24,8 @@ SOFTWARE.
 
 import time
 import unittest
-
+import pytest
 from flask import Flask
-
 from ..src.routes import routes
 
 
@@ -48,14 +47,14 @@ class TestCache(unittest.TestCase):
         routes(app, time.time())
         cls.client = app.test_client()
 
-    def test_cache_deletion_successful(self):
+    def test_10_deletion_successful(self):
         response = self.client.delete("/record/test.mgz/")
         data = response.get_json()
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data["deleted"], 1)
 
-    def test_cache_deletion_empty(self):
+    def test_20_deletion_empty(self):
         response = self.client.delete("/record/test.mgz/")
         data = response.get_json()
 
