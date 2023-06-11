@@ -27,7 +27,7 @@ RUN apk --no-cache add \
     tk-dev \
     zlib-dev
 
-ARG ENV
+ARG ENV=production
 
 ENV GROUP=a2j \
     USER=a2j \
