@@ -120,3 +120,7 @@ class TestErrors(unittest.TestCase):
         assert len(data["errors"]) == length
         assert data["errors"][index]["errno"] == errno
         assert data["errors"][index]["message"] == message
+
+
+if __name__ == "__main__":
+    unittest.main()

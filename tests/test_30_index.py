@@ -25,9 +25,7 @@ SOFTWARE.
 import os
 import time
 import unittest
-
 from flask import Flask
-
 from ..src.a2j import get_version
 from ..src.routes import routes
 
@@ -36,6 +34,8 @@ class TestIndex(unittest.TestCase):
     """
     Test index.
     """
+
+    client = None
 
     @classmethod
     def setUpClass(cls):
@@ -53,5 +53,10 @@ class TestIndex(unittest.TestCase):
 
         assert data["version"] == get_version()
         assert isinstance(data["uptime"], float)
-        assert data["environment"] == os.getenv("FLASK_ENV")
+        assert data["debug"] == os.getenv("FLASK_DEBUG")
+        assert data["environment"] == os.getenv("ENV")
         assert data["endpoints"] == ["record", "minimap"]
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -24,9 +24,7 @@ SOFTWARE.
 
 import time
 import unittest
-
 from flask import Flask
-
 from ..src.routes import routes
 
 
@@ -34,6 +32,8 @@ class TestCache(unittest.TestCase):
     """
     Test data caching.
     """
+
+    client = None
 
     @classmethod
     def setUpClass(cls):
@@ -46,12 +46,20 @@ class TestCache(unittest.TestCase):
         routes(app, time.time())
         cls.client = app.test_client()
 
-    def test_clean(self):
-        data = self.client.delete("/record/test.mgz/").get_json()
+    def test_10_deletion_successful(self):
+        response = self.client.delete("/record/test.mgz/")
+        data = response.get_json()
 
-        assert data["deleted"] == 1
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["deleted"], 1)
 
-    def test_clean_empty(self):
-        data = self.client.delete("/record/test.mgz/").get_json()
+    def test_20_deletion_empty(self):
+        response = self.client.delete("/record/test.mgz/")
+        data = response.get_json()
 
-        assert data["deleted"] == 0
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["deleted"], 0)
+
+
+if __name__ == "__main__":
+    unittest.main()

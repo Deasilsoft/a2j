@@ -54,7 +54,8 @@ def routes(app: Flask, start_time: float):
         return Response(json.dumps({
             "version": get_version(),
             "uptime": time.time() - start_time,
-            "environment": os.getenv("FLASK_ENV"),
+            "debug": os.getenv("FLASK_DEBUG"),
+            "environment": os.getenv("ENV"),
             "endpoints": ["record", "minimap"]
         }), mimetype="application/json")
 
