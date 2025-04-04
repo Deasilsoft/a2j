@@ -1,6 +1,6 @@
 FROM python:3.12.3-alpine
 
-LABEL version="2023.06-2"
+LABEL version="2025.04.01"
 LABEL description="Deasilsoft/a2j"
 LABEL maintainer="Sondre Benjamin Aasen"
 
