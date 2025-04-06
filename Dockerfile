@@ -1,4 +1,4 @@
-FROM python:3.12.3-alpine
+FROM python:3.13.2-alpine
 
 LABEL version="2025.04.01"
 LABEL description="Deasilsoft/a2j"
